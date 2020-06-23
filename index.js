@@ -45,12 +45,15 @@ sailingareas.forEach((sailingarea) => {
       url: sailingarea.geoJson,
       format: new GeoJSON(),
     }),
+    style: new Style({
+      fill: new Fill({
+        color: "rgba(204, 102, 255,0.5)",
+      }),
+    }),
     visible: false,
   });
 });
 
-
-/*
 // weather experiment
 var featureRequest = new WFS().writeGetFeature({
   srsName: "EPSG:3857",
@@ -60,47 +63,83 @@ var featureRequest = new WFS().writeGetFeature({
   outputFormat: "application/json",
 });
 
+var vectorSource = new VectorSource();
+var warningLayer = new VectorLayer({
+  source: vectorSource,
+  visible: false,
+  style: new Style({
+    stroke: new Stroke({
+      color: "rgba(0, 0, 255, 1.0)",
+      width: 0.5,
+    }),
+  }),
+});
+
 // then post the request and add the received features to a layer
 fetch("https://maps.dwd.de/geoserver/dwd/ows", {
   method: "POST",
   body: new XMLSerializer().serializeToString(featureRequest),
 })
   .then(function (response) {
-    console.log(response);
     return response.json();
   })
   .then(function (json) {
     var features = new GeoJSON().readFeatures(json);
+    // TODO:
     console.log(features);
-    vectorSource.addFeatures(features);
-    map.getView().fit(vectorSource.getExtent());
-  });
+    if (features.length > 0) {
+      features.forEach((feature) => {
+        var colorcode;
+        switch (feature.values_.SEVERITY) {
+          case "Minor":
+            colorcode = "rgba(153, 255, 51, 0.5)";
+            break;
+          case "Moderate":
+            colorcode = "rgba(255, 255, 51, 0.5)";
+            break;
+          case "Severe":
+            colorcode = "rgba(255, 153, 51, 0.5)";
+            break;
+          case "Extreme":
+            colorcode = "rgba(255, 51, 51, 0.5)";
+            break;
+        }
+        feature.setStyle(
+          new Style({
+            fill: new Fill({
+              color: colorcode,
+            }),
+          })
+        );
+        feature.set("featureType", "dwdWarning");
+      });
+      vectorSource.addFeatures(features);
+    } else {
+      console.log("keine Wetterwarnungen vorhanden.");
+    }
 
-var vectorSource = new VectorSource();
-var vector = new VectorLayer({
-  source: vectorSource,
-  style: new Style({
-    stroke: new Stroke({
-      color: "rgba(0, 0, 255, 1.0)",
-      width: 2,
-    }),
-  }),
-});*/
+    document
+      .getElementById("warndingcount")
+      .appendChild(document.createTextNode(features.length));
+    document.getElementById("spinner").style.display = "none";
+  });
 
 //END WEATHER experiment
 
 var olView = new View({
   center: [982062.938921, 6997962.81318],
   zoom: 8,
+  projection: "EPSG:3857",
 });
 
 const map = new Map({
-  target: "map",
+  target: document.getElementById("map"),
   layers: [
     new TileLayer({
       source: new OSM(),
     }),
     openSeaMapLayer,
+    warningLayer,
   ],
   view: olView,
 });
@@ -116,7 +155,6 @@ window.onload = function () {
 function loadBoats() {
   const boatList = document.getElementById("boats");
   boatsJson.boats.forEach((boat, index) => {
-
     var boatEntry = document.createElement("li");
 
     boatEntry.appendChild(document.createTextNode(boat.name));
@@ -127,7 +165,6 @@ function loadBoats() {
       viewBoat(index);
     };
     boatList.appendChild(boatEntry);
-
   });
 }
 
@@ -151,6 +188,8 @@ boatsJson.boats.forEach((boat, boatIndex) => {
     name: boat.name,
   });
   boatFeature.setStyle(iconStyle);
+  boatFeature.setId(boatIndex);
+  boatFeature.set("featureType", "sailingboat");
 
   var layer = new VectorLayer({
     source: new VectorSource({
@@ -161,53 +200,94 @@ boatsJson.boats.forEach((boat, boatIndex) => {
   });
 
   boatLayers[boatIndex] = layer;
-  console.log(boat.name + ": boatlayer: " + boatIndex)
   map.addLayer(layer);
 });
 
+/* START clickable icon */
+
+// display popup on click
+map.on("click", function (evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    return feature;
+  });
+  if (feature) {
+    console.log(feature);
+    if (feature.get("featureType") == "dwdWarning") {
+      console.log(feature);
+      alert(feature.values_.SEVERITY + ": " + feature.values_.DESCRIPTION)
+    } else if (feature.get("featureType") == "sailingboat") {
+      viewBoat(feature.getId());
+    } else {
+      console.log("Dont know what to do with this...");
+      console.log(feature);
+    }
+  }
+});
+
+// change mouse cursor when over marker
+map.on("pointermove", function (e) {
+  var pixel = map.getEventPixel(e.originalEvent);
+  var hit = map.hasFeatureAtPixel(pixel);
+  map.getTarget().style.cursor = hit ? "pointer" : "";
+});
+/* END clickable icon */
+
 function viewBoat(boatIndex) {
-  if(boatIndex == selectedBoatIndex) {
+  if (boatIndex == selectedBoatIndex) {
     selectedBoatIndex = -1;
     olView.animate({
       center: [982062.938921, 6997962.81318],
       duration: 2000,
       zoom: 8,
     });
-  } else {
+  } else if (boatsJson.boats[boatIndex]) {
     selectedBoatIndex = boatIndex;
+  } else {
+    console.log("Boat with id " + boatIndex + " not found.");
+    return;
+  }
+
+  sailingareas.forEach((sailingarea) => {
+    sailingareaLayers[sailingarea.name].setVisible(false);
+  });
+  if (selectedBoatIndex >= 0) {
+    boatsJson.boats[selectedBoatIndex].sailingareas.forEach(
+      (boatSailingarea) => {
+        if (sailingareaLayers[boatSailingarea]) {
+          sailingareaLayers[boatSailingarea].setVisible(true);
+        } else {
+          console.log(
+            "Das Segelrevier '" +
+              boatSailingarea +
+              "' des Bootes '" +
+              boatsJson.boats[selectedBoatIndex].name +
+              "' wurde nicht gefunden."
+          );
+        }
+      }
+    );
   }
 
   var boats = document.getElementById("boats").getElementsByTagName("li");
-  for(var i = 0;i<boats.length;i++) {
-    if(selectedBoatIndex == -1) {
-
-      boatLayers[boatIndex].setVisible(true);
+  for (var i = 0; i < boats.length; i++) {
+    if (selectedBoatIndex == -1) {
+      boatLayers[i].setVisible(true);
       boats[i].classList.remove("active");
-      // todo segelreviere unsichtbar
-    } else if(selectedBoatIndex == i) {
-      console.log(boats[0].get + ": boatlayer: " + boatIndex + " wird aktiviert.");
-      boatLayers[boatIndex].setVisible(false);
+    } else if (selectedBoatIndex == i) {
+      boatLayers[i].setVisible(true);
       boats[i].classList.add("active");
-      /*olView.animate({
+      olView.animate({
         center: fromLonLat([
           boatsJson.boats[boatIndex].location.lon,
           boatsJson.boats[boatIndex].location.lat,
         ]),
         duration: 2000,
-        zoom: 13,
-      });*/
-      /*boatsJson.boats[boatIndex].sailingarea.forEach((sa) => {
-        sailingareaLayers[sa].setVisible(true);
-      });*/
+      });
     } else {
       boats[i].classList.remove("active");
-      boatLayers[boatIndex].setVisible(false);
+      boatLayers[i].setVisible(false);
     }
   }
- 
-
-
-
 }
 
 // OpenSeaMap Switcher
@@ -222,3 +302,15 @@ openSeaMapLayerVisibility();
 document
   .getElementById("seamaplayer")
   .addEventListener("click", openSeaMapLayerVisibility);
+
+function dwdwarningLayerVisibility() {
+  if (document.getElementById("dwdwarninglayer").checked) {
+    warningLayer.setVisible(true);
+  } else {
+    warningLayer.setVisible(false);
+  }
+}
+dwdwarningLayerVisibility();
+document
+  .getElementById("dwdwarninglayer")
+  .addEventListener("click", dwdwarningLayerVisibility);

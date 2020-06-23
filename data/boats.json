@@ -3,7 +3,7 @@
     {
       "name": "Le Vent",
       "type": "Jeanneau Brio, Kielyacht",
-      "sailingarea": ["Ostsee"],
+      "sailingareas": ["Ostsee"],
       "location": {
         "name": "Travemünde, Passathafen", 
         "lon": 10.878699,
@@ -13,7 +13,7 @@
     {
       "name": "Spätlese",
       "type": "Sportina 700, Hubkielyacht",
-      "sailingarea": ["Nordsee"],
+      "sailingareas": ["Nordsee"],
       "location": {
         "name": "Horumersiel", 
         "lon": 8.022523,
@@ -23,7 +23,7 @@
     {
       "name": "Seefalke",
       "type": "Polyvalk, gaffelgetakelte Kieljolle",
-      "sailingarea": ["Mittelweser"],
+      "sailingareas": ["Mittelweser"],
       "location": {
         "name": "WVH-Hemelingen", 
         "lon": 8.873729,
@@ -33,7 +33,7 @@
     {
       "name": "Kolk",
       "type": "Polyvalk, gaffelgetakelte Kieljolle",
-      "sailingarea": ["Mittelweser", "Unterweser"],
+      "sailingareas": ["Mittelweser", "Unterweser"],
       "location": {
         "name": "WVH-Hemelingen", 
         "lon": 8.873729,
@@ -43,11 +43,21 @@
     {
       "name": "Zebulon",
       "type": "15er-Jollenkreuzer",
-      "sailingarea": ["Mittelweser", "Unterweser", "Wattenmeer"],
+      "sailingareas": ["Mittelweser", "Unterweser", "Nordsee"],
       "location": {
         "name": "Lesum", 
-        "lon": 8.639801,
-        "lat": 53.161833
+        "lon": 8.678110,
+        "lat": 53.161602 
+      }
+    }, 
+    {
+      "name": "JollyJumper",
+      "type": "Greif-Jollenkreuzer",
+      "sailingareas": ["Mecklenburgische Seenplatte"],
+      "location": {
+        "name": "Malchow", 
+        "lon": 12.443780,
+        "lat": 53.480318
       }
     }
   ]

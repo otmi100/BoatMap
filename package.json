@@ -1,7 +1,7 @@
 {
-  "name": "layer-group",
+  "name": "boatinfo",
   "dependencies": {
-    "data": "^0.6.1",
+    "jquery": "^3.5.1",
     "ol": "6.3.1"
   },
   "devDependencies": {
