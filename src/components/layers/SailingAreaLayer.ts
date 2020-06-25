@@ -30,11 +30,16 @@ export class SailingAreaLayer extends VectorLayer {
       style: selectedStyle,
       visible: true,
     });
+
+    this.showAreas([]);
   }
 
   showAreas(sailingAreas: string[]): void {
-    vectorSource.getFeatures().forEach((feature) => {
-      if (sailingAreas.indexOf(feature.getProperties()["name"]) > 0) {
+    console.log(sailingAreas);
+    console.log(vectorSource.getFeatures());
+    vectorSource.getFeatures().forEach((feature:Feature) => {
+      console.log(feature.getProperties());
+      if (sailingAreas.some((sa) => sa === feature.getProperties()["name"])) {
         feature.setStyle(selectedStyle);
       } else {
         feature.setStyle(unselectedStyle);

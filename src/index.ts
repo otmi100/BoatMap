@@ -21,7 +21,7 @@ var openStreetMapLayer = new TileLayer({
   source: new OSM(),
 });
 
-const boatMap = new BoatMap([boatLayer, sailingAreaLayer, weatherwarningLayer, openSeaMapLayer, openStreetMapLayer]);
+const boatMap = new BoatMap([openSeaMapLayer, openStreetMapLayer, sailingAreaLayer, weatherwarningLayer, boatLayer]);
 
 window.onload = function () {
   boatMenu = new BoatMenu(boatsJson.boats, viewBoat);
@@ -99,4 +99,17 @@ dwdwarningLayerVisibility();
 (<HTMLElement>document.getElementById("dwdwarninglayer")).addEventListener(
   "click",
   dwdwarningLayerVisibility
+);
+
+function osmLayerVisibility() {
+  if ((<HTMLInputElement>document.getElementById("osmlayer")).checked) {
+    openStreetMapLayer.setVisible(true);
+  } else {
+    openStreetMapLayer.setVisible(false);
+  }
+}
+osmLayerVisibility();
+(<HTMLElement>document.getElementById("osmlayer")).addEventListener(
+  "click",
+  osmLayerVisibility
 );
