@@ -2,42 +2,21 @@ import "ol/ol.css";
 import { Map, View, Feature } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
-import GeoJSON from "ol/format/GeoJSON";
-
-import { Fill, Stroke, Style, Text, Icon } from "ol/style";
 import { fromLonLat } from "ol/proj";
-
-
-var selectedBoatIndex = -1;
-
 import * as boatsJson from "./data/boats.json";
-
-
 import { BoatLayer } from "./components/layers/BoatLayer";
 import { SailingAreaLayer } from "./components/layers/SailingAreaLayer";
 import { WeatherwarningLayer } from "./components/layers/WeatherwarningLayer";
+import { OpenSeaMapLayer } from "./components/layers/OpenSeaMapLayer";
+import { BoatMenu } from "./components/BoatMenu";
 
-var openSeaMapLayer = new TileLayer({
-  source: new OSM({
-    attributions: [
-      '© <a href="http://www.openseamap.org/">OpenSeaMap</a>',
-      ATTRIBUTION,
-    ],
-    opaque: false,
-    url: "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
-    crossOrigin: "anonymous",
-  }),
-  visible: false,
-});
-
-
-
+var selectedBoatIndex = -1; // currently selected boat
+var boatMenu: BoatMenu;
 
 var boatLayer = new BoatLayer(boatsJson.boats);
 var sailingAreaLayer = new SailingAreaLayer();
 var weatherwarningLayer = new WeatherwarningLayer();
+var openSeaMapLayer = new OpenSeaMapLayer();
 
 var olView = new View({
   center: [982062.938921, 6997962.81318],
@@ -54,36 +33,14 @@ const map = new Map({
     openSeaMapLayer,
     weatherwarningLayer,
     sailingAreaLayer,
-    boatLayer
+    boatLayer,
   ],
   view: olView,
 });
 
 window.onload = function () {
-  loadBoats();
+  boatMenu = new BoatMenu(boatsJson.boats, viewBoat);
 };
-
-function loadBoats() {
-  const boatList = document.getElementById("boats");
-  if (boatList) {
-    boatsJson.boats.forEach((boat, index) => {
-      var boatEntry = document.createElement("li");
-
-      boatEntry.appendChild(document.createTextNode(boat.name));
-      boatEntry.appendChild(document.createElement("BR"));
-      boatEntry.appendChild(document.createTextNode(boat.type));
-
-      boatEntry.onclick = function () {
-        viewBoat(index);
-      };
-      boatList.appendChild(boatEntry);
-    });
-  }
-}
-
-
-
-/* START clickable icon */
 
 // display popup on click
 map.on("click", function (evt) {
@@ -116,50 +73,34 @@ map.on("pointermove", function (e) {
 
 function viewBoat(boatIndex: number) {
   if (boatIndex == selectedBoatIndex) {
-    selectedBoatIndex = -1;
+    selectedBoatIndex = -1; // Delesect Boat
+    sailingAreaLayer.showAreas([]); // Hide sailing areas
     olView.animate({
+      // zoom out
       center: [982062.938921, 6997962.81318],
       duration: 2000,
       zoom: 8,
     });
   } else if (boatsJson.boats[boatIndex]) {
     selectedBoatIndex = boatIndex;
+    olView.animate({
+      center: fromLonLat([
+        boatsJson.boats[boatIndex].location.lon,
+        boatsJson.boats[boatIndex].location.lat,
+      ]),
+      duration: 2000,
+    });
+    sailingAreaLayer.showAreas(boatsJson.boats[selectedBoatIndex].sailingareas);
   } else {
     console.log("Boat with id " + boatIndex + " not found.");
     return;
   }
 
-  boatLayer.focusBoat(selectedBoatIndex);
-
-  if( selectedBoatIndex == -1) {
-    sailingAreaLayer.showAreas([]);
-  }
-  else if (selectedBoatIndex >= 0) {
-    sailingAreaLayer.showAreas(boatsJson.boats[selectedBoatIndex].sailingareas);
-  }
-
-  const boats = (<HTMLElement>(
-    document.getElementById("boats")
-  )).getElementsByTagName("li");
-  for (var i = 0; i < boats.length; i++) {
-    if (selectedBoatIndex == -1) {
-      boats[i].classList.remove("active");
-    } else if (selectedBoatIndex == i) {
-      boats[i].classList.add("active");
-      olView.animate({
-        center: fromLonLat([
-          boatsJson.boats[boatIndex].location.lon,
-          boatsJson.boats[boatIndex].location.lat,
-        ]),
-        duration: 2000,
-      });
-    } else {
-      boats[i].classList.remove("active");
-    }
-  }
+  boatLayer.highlightBoat(selectedBoatIndex);
+  boatMenu.styleBoatMenu(selectedBoatIndex);
 }
 
-// OpenSeaMap Switcher
+// Layer Switcher
 function openSeaMapLayerVisibility() {
   if ((<HTMLInputElement>document.getElementById("seamaplayer")).checked) {
     openSeaMapLayer.setVisible(true);

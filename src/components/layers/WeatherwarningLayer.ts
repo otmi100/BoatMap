@@ -7,7 +7,6 @@ import { Feature } from "ol";
 
 export class WeatherwarningLayer extends VectorLayer {
   constructor() {
-
     var featureRequest = new WFS().writeGetFeature({
       srsName: "EPSG:3857",
       featureNS: "https://maps.dwd.de/geoserver/dwd/ows",
@@ -22,10 +21,10 @@ export class WeatherwarningLayer extends VectorLayer {
       method: "POST",
       body: new XMLSerializer().serializeToString(featureRequest),
     })
-      .then( (response) => {
+      .then((response) => {
         return response.json();
       })
-      .then( (json) => {
+      .then((json) => {
         var features = new GeoJSON().readFeatures(json);
         if (features.length > 0) {
           features.forEach((feature) => {

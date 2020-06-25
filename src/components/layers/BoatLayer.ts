@@ -6,6 +6,7 @@ import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
 import boatlogo from "../../data/img/boat.svg";
 import IconAnchorUnits from "ol/style/IconAnchorUnits";
+import { Boat } from "../Boat";
 
 var boatFeatures:Feature[] = [];
 
@@ -31,12 +32,7 @@ const iconStyleFocused = new Style({
   }),
 });
 
-interface Boat {
-  name: string;
-  type: string;
-  sailingareas: string[];
-  location: { name: string; lon: number; lat: number };
-}
+
 
 export class BoatLayer extends VectorLayer {
   constructor(boats: Boat[]) {
@@ -63,7 +59,7 @@ export class BoatLayer extends VectorLayer {
     });
   }
 
-  focusBoat(boatIndex:number): void {
+  highlightBoat(boatIndex:number): void {
     
     boatFeatures.forEach((boatFeature, boatFeatureIndex) => {
       if(boatIndex == -1) {
