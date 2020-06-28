@@ -62,6 +62,8 @@ export class WeatherwarningLayer extends VectorLayer {
         }),
       }),
     });
+
+    this.set("layerName", "WeatherwarningLayer");
   }
 
   private getColorCode(feature: Feature): string {

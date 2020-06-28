@@ -1,6 +1,7 @@
 import { Map, View } from "ol";
 import Layer from "ol/layer/Layer";
 import { fromLonLat } from "ol/proj";
+import BaseLayer from "ol/layer/Base";
 
 export class BoatMap extends Map {
   constructor(layers: Layer[]) {
@@ -13,6 +14,7 @@ export class BoatMap extends Map {
         projection: "EPSG:3857",
       }),
     });
+
   }
 
   defaultZoomAndFocus() {
@@ -24,14 +26,24 @@ export class BoatMap extends Map {
     });
   }
 
-  focus(lon:number, lat:number) {
-      this.getView().animate({
-        center: fromLonLat([
-          lon,
-          lat,
-        ]),
-        duration: 2000,
-      });
+  focus(lon: number, lat: number) {
+    this.getView().animate({
+      center: fromLonLat([
+        lon,
+        lat,
+      ]),
+      duration: 2000,
+    });
 
+  }
+
+  getLayer(layername: string): BaseLayer | undefined {
+    var foundLayer: BaseLayer | undefined;
+    this.getLayers().forEach(layer => {
+      if (layer.getProperties()["layerName"] == layername) {
+        foundLayer = layer;
+      }
+    });
+    return foundLayer;
   }
 }

@@ -9,8 +9,11 @@ import { OpenSeaMapLayer } from "./components/layers/OpenSeaMapLayer";
 import TileLayer from "ol/layer/Tile";
 import { BoatMenu } from "./components/BoatMenu";
 import { BoatMap } from "./components/BoatMap";
+import { WindbarbLayer } from "./components/layers/WindbarbLayer";
+import { BoatMapController } from "./controllers/BoatMapController";
+import { BoatMenuController } from "./controllers/BoatMenuController";
 
-var selectedBoatIndex = -1; // currently selected boat
+
 var boatMenu: BoatMenu;
 
 var boatLayer = new BoatLayer(boatsJson.boats);
@@ -20,59 +23,22 @@ var openSeaMapLayer = new OpenSeaMapLayer();
 var openStreetMapLayer = new TileLayer({
   source: new OSM(),
 });
+var windbarbLayer = new WindbarbLayer();
 
-const boatMap = new BoatMap([openSeaMapLayer, openStreetMapLayer, sailingAreaLayer, weatherwarningLayer, boatLayer]);
+const boatMap = new BoatMap([openSeaMapLayer, openStreetMapLayer, sailingAreaLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
+var boatMenuController: BoatMenuController;
+var boatMapController: BoatMapController;
 
 window.onload = function () {
-  boatMenu = new BoatMenu(boatsJson.boats, viewBoat);
+  boatMapController = new BoatMapController(boatsJson.boats, boatMap);
+  boatMenu = new BoatMenu(boatsJson.boats, boatMapController);
+  boatMenuController = new BoatMenuController(boatMenu);
+  boatMapController.registerBoatMenuController(boatMenuController);
+  
+
 };
 
-// click on map handler
-boatMap.on("click", function (evt) {
-  var feature = boatMap.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    return feature;
-  });
-  if (feature) {
-    if (feature.get("featureType") == "dwdWarning") {
-      alert(
-        feature.getProperties()["SEVERITY"] +
-          ": " +
-          feature.getProperties()["DESCRIPTION"]
-      );
-    } else if (feature.get("featureType") == "sailingboat") {
-      viewBoat(<number>feature.getId());
-    } else {
-      console.log("Dont know what to do with this...");
-      console.log(feature);
-    }
-  }
-});
 
-// change mouse cursor when over marker
-boatMap.on("pointermove", function (e) {
-  var pixel = boatMap.getEventPixel(e.originalEvent);
-  var hit = boatMap.hasFeatureAtPixel(pixel);
-  (<HTMLElement>boatMap.getTarget()).style.cursor = hit ? "pointer" : "";
-});
-/* END clickable icon */
-
-function viewBoat(boatIndex: number) {
-  if (boatIndex == selectedBoatIndex) {
-    selectedBoatIndex = -1; // Delesect Boat
-    sailingAreaLayer.showAreas([]); // Hide sailing areas
-    boatMap.defaultZoomAndFocus();
-  } else if (boatsJson.boats[boatIndex]) {
-    selectedBoatIndex = boatIndex;
-    boatMap.focus(boatsJson.boats[boatIndex].location.lon, boatsJson.boats[boatIndex].location.lat);
-    sailingAreaLayer.showAreas(boatsJson.boats[selectedBoatIndex].sailingareas);
-  } else {
-    console.log("Boat with id " + boatIndex + " not found.");
-    return;
-  }
-
-  boatLayer.highlightBoat(selectedBoatIndex);
-  boatMenu.styleBoatMenu(selectedBoatIndex);
-}
 
 // Layer Switcher
 function openSeaMapLayerVisibility() {
@@ -112,4 +78,17 @@ osmLayerVisibility();
 (<HTMLElement>document.getElementById("osmlayer")).addEventListener(
   "click",
   osmLayerVisibility
+);
+
+function windbarblayerVisibility() {
+  if ((<HTMLInputElement>document.getElementById("windbarblayer")).checked) {
+    windbarbLayer.setVisible(true);
+  } else {
+    windbarbLayer.setVisible(false);
+  }
+}
+windbarblayerVisibility();
+(<HTMLElement>document.getElementById("windbarblayer")).addEventListener(
+  "click",
+  windbarblayerVisibility
 );

@@ -57,6 +57,9 @@ export class BoatLayer extends VectorLayer {
       }),
       visible: true,
     });
+
+
+    this.set("layerName", "BoatLayer");
   }
 
   highlightBoat(boatIndex:number): void {

@@ -1,7 +1,12 @@
 import { Boat } from "./Boat";
+import { BoatMapController } from "../controllers/BoatMapController";
 
 export class BoatMenu {
-  constructor(boats: Boat[], clickFunction: Function) {
+
+  
+  constructor(boats: Boat[], boatMapController: BoatMapController) {
+
+    console.log(boatMapController);
     const boatList = document.getElementById("boats");
     if (boatList) {
       boats.forEach((boat, index) => {
@@ -12,25 +17,16 @@ export class BoatMenu {
         boatEntry.appendChild(document.createTextNode(boat.type));
 
         boatEntry.onclick = function () {
-            clickFunction(index);
+          boatMapController.viewBoat(index);
         };
         boatList.appendChild(boatEntry);
       });
     }
   }
 
-  styleBoatMenu(selectedBoatIndex: number): void {
-    const boats = (<HTMLElement>(
-      document.getElementById("boats")
-    )).getElementsByTagName("li");
-    for (var i = 0; i < boats.length; i++) {
-      if (selectedBoatIndex == -1) {
-        boats[i].classList.remove("active");
-      } else if (selectedBoatIndex == i) {
-        boats[i].classList.add("active");
-      } else {
-        boats[i].classList.remove("active");
-      }
-    }
+  getBoatItems() {
+    return (<HTMLElement>document.getElementById("boats")).getElementsByTagName(
+      "li"
+    );
   }
 }

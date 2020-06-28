@@ -1,2 +1,13 @@
-docker run --name "postgis" -d -t kartoza/postgis:9.4-2.1
-docker run --name "geoserver"  --link postgis:postgis -p 8080:8080 -d -t kartoza/geoserver
+#Installation
+
+./geoserver/docker-env change pw
+docker-compose (-d) up
+login
+
+
+
+
+docker network ls
+docker network inspect geoserver_default
+
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=25434 dbname=gis user=docker password=docker" "Segelgebiete.geojson"

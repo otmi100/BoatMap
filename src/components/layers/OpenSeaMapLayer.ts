@@ -15,5 +15,6 @@ export class OpenSeaMapLayer extends TileLayer {
       }),
       visible: false,
     });
+    this.set("layerName", "OpenSeaMapLayer");
   }
 }
