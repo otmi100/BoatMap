@@ -1,10 +1,9 @@
-import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import GeoJSON from "ol/format/GeoJSON";
 import { Style, Fill } from "ol/style";
 
-import sailingareaGeoJson from "../../data/Segelgebiete.geojson";
 import { Feature } from "ol";
+import TileLayer from "ol/layer/Tile";
+import TileWMS from "ol/source/TileWMS";
 
 var vectorSource: VectorSource;
 const selectedStyle = new Style({
@@ -19,30 +18,29 @@ const unselectedStyle = new Style({
   }),
 });
 
-export class SailingAreaLayer extends VectorLayer {
-  constructor() {
-    vectorSource = new VectorSource({
-      url: sailingareaGeoJson,
-      format: new GeoJSON(),
-    });
-    super({
-      source: vectorSource,
-      style: selectedStyle,
-      visible: true,
-    });
+export class SailingAreaLayer extends TileLayer {
 
+  constructor(initialSailingAreas: string[]) {
+
+    super({
+      source: new TileWMS({
+        url: 'http://v39192.php-friends.de:8600/geoserver/wms',
+        crossOrigin: 'anonymous',
+        attributions: '© Michel Otto',
+        params: {'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon'},
+        serverType: 'geoserver',
+        
+      })
+    });
     this.set("layerName", "SailingAreaLayer");
+    
   }
 
   showAreas(sailingAreas: string[]): void {
-    vectorSource.getFeatures().forEach((feature:Feature) => {
-      
-      if (sailingAreas.some((sa) => sa === feature.getProperties()["name"])) {
-        feature.setStyle(selectedStyle);
-      } else {
-        feature.setStyle(unselectedStyle);
-      }
+    console.log(sailingAreas);
+    (<TileWMS>this.getSource()).updateParams({
+      'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon',
+      'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'
     });
-
   }
 }
