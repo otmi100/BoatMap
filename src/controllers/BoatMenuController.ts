@@ -6,10 +6,9 @@ export class BoatMenuController {
   private boatMenu: BoatMenu;
   private boatMapController: BoatMapController | undefined;
 
-  x = "test";
-
   constructor(boats: Boat[]) {
     this.boatMenu = new BoatMenu(boats, this);
+    this.updateLayerVisibilty();
   }
 
   viewBoat(boatIndex: number) {
@@ -20,11 +19,10 @@ export class BoatMenuController {
     this.boatMenu.styleBoatMenu(selectedBoatIndex);
   }
   
-  setLayerVisibilty() : void {
+  updateLayerVisibilty() : void {
     let visibleLayers:string[] = [];
     this.boatMenu.getLayers().forEach(layer => {
       if((<HTMLInputElement>layer.inputElement).checked) {
-        console.log(layer.name);
         visibleLayers.push(layer.name);
       }
     });

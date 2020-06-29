@@ -15,11 +15,11 @@ export class BoatMenu {
 
   constructor(boats: Boat[], boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
-    this.generateLayerCheckboxes(boatMenuController);
-    this.generateBoatList(boats, boatMenuController);
+    this.generateLayerCheckboxes();
+    this.generateBoatList(boats);
   }
 
-  generateBoatList(boats: Boat[], boatMenuController: BoatMenuController) {
+  generateBoatList(boats: Boat[]) {
     const boatList = document.getElementById("boats");
     if (boatList) {
       boats.forEach((boat, index) => {
@@ -27,13 +27,13 @@ export class BoatMenu {
         boatEntry.appendChild(document.createTextNode(boat.name));
         boatEntry.appendChild(document.createElement("BR"));
         boatEntry.appendChild(document.createTextNode(boat.type));
-        boatEntry.onclick = () => boatMenuController.viewBoat(index);
+        boatEntry.onclick = () => this.boatMenuController.viewBoat(index);
         boatList.appendChild(boatEntry);
       });
     }
   }
 
-  generateLayerCheckboxes(boatMenuController: BoatMenuController) {
+  generateLayerCheckboxes() {
     const switcherElements = document.getElementById("layerswitcher");
     this.layers.forEach(layer => {
       var layerLabel = document.createElement("label");
@@ -44,36 +44,13 @@ export class BoatMenu {
       var caption = document.createElement("SPAN");
       caption.innerHTML = layer.innerHTML;
       layerLabel.appendChild(caption);
-      layerCheckBox.onclick = () => boatMenuController.setLayerVisibilty();
+      layerCheckBox.onclick = () => this.boatMenuController.updateLayerVisibilty();
       layer.inputElement = layerCheckBox;
       switcherElements?.appendChild(layerLabel);
       switcherElements?.appendChild(document.createElement("BR"));
 
     });
   }
-
-  /*
-<label class="switch">
-<input type="checkbox" id="seamaplayer">
-Zeige Seekarte<br>
-Quelle: OpenSeaMap.org
-</label><br />
-<label class="switch">
-<input type="checkbox" id="dwdwarninglayer">
-Zeige Wetterwarnungen <br>
-Quelle: Deutscher Wetterdienst
-</label><br />
-<label class="switch">
-<input type="checkbox" id="osmlayer">
-Zeige OpenStreetMap
-Quelle: OpenStreetMap.org
-</label><br />
-<label class="switch">
-<input type="checkbox" id="windbarblayer">
-Zeige Windfahnen
-Quelle: Deutscher Wetterdienst
-</label><br />*/
-
 
   styleBoatMenu(selectedBoatIndex: number): void {
     var boats = this.getBoatItems();

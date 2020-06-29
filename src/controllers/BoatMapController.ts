@@ -29,7 +29,10 @@ export class BoatMapController {
     var windbarbLayer = new WindbarbLayer();
 
     this.boatMap = new BoatMap([openStreetMapLayer, openSeaMapLayer, sailingAreaLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
+    this.registerMouseInteraction();
+  }
 
+  registerMouseInteraction() {
     this.boatMap.on("click", (evt) => {
       var feature = this.boatMap.forEachFeatureAtPixel(evt.pixel, function (feature) {
         return feature;
@@ -63,6 +66,7 @@ export class BoatMapController {
   registerBoatMenuController(boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
   }
+
 
   viewBoat(boatIndex: number) {
     var sailingAreaLayer = <SailingAreaLayer>this.boatMap.getLayerByName("SailingAreaLayer");
