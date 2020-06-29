@@ -24,8 +24,8 @@ docker network inspect geoserver_default
 
 db/user/pw: docker-env/db.env
 
-
-cd boatinfo/src/data/
+clone git repo or load Segelgebiete.geojson manually
+cd boatinfo/geoserver/
 ogr2ogr -f "PostgreSQL" PG:"host=localhost port=25434 dbname=gis user=docker password=docker" "Segelgebiete.geojson"
 -> Hinweis: < 3.0.2 funktioniert nicht mit postres >=12
 ggf aktuelle version aus dem untubu repository (sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable) oder auf http://download.osgeo.org/gdal/
@@ -33,3 +33,4 @@ ggf aktuelle version aus dem untubu repository (sudo add-apt-repository ppa:ubun
 Layer hinzufügen -> segelgebiete -> publizieren
 
 Begrenzendes Rechteck-> aus den daten berechnen
+Speichern

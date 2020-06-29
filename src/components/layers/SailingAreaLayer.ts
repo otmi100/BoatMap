@@ -1,11 +1,7 @@
-import VectorSource from "ol/source/Vector";
 import { Style, Fill } from "ol/style";
-
-import { Feature } from "ol";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 
-var vectorSource: VectorSource;
 const selectedStyle = new Style({
   fill: new Fill({
     color: "rgba(204, 102, 255,0.5)",
@@ -20,7 +16,7 @@ const unselectedStyle = new Style({
 
 export class SailingAreaLayer extends TileLayer {
 
-  constructor(initialSailingAreas: string[]) {
+  constructor() {
 
     super({
       source: new TileWMS({
@@ -42,5 +38,7 @@ export class SailingAreaLayer extends TileLayer {
       'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon',
       'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'
     });
+
+
   }
 }
