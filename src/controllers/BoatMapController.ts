@@ -1,11 +1,9 @@
 import { BoatMap } from "../components/BoatMap";
 import { fromLonLat } from "ol/proj";
-import Layer from "ol/layer/Layer";
-import { SailingAreaLayer } from "../components/layers/SailingAreaLayer";
 import { Boat } from "../components/Boat";
 import { BoatLayer } from "../components/layers/BoatLayer";
-import { BoatMenu } from "../components/BoatMenu";
 import { BoatMenuController } from "./BoatMenuController";
+import { SailingAreaLayer } from "../components/layers/SailingAreaLayer";
 import { WeatherwarningLayer } from "../components/layers/WeatherwarningLayer";
 import { OpenSeaMapLayer } from "../components/layers/OpenSeaMapLayer";
 import { OpenStreetMapLayer } from "../components/layers/OpenStreetMapLayer";
@@ -28,7 +26,7 @@ export class BoatMapController {
     var openStreetMapLayer = new OpenStreetMapLayer();
     var windbarbLayer = new WindbarbLayer();
 
-    this.boatMap = new BoatMap([openStreetMapLayer, openSeaMapLayer, sailingAreaLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
+    this.boatMap = new BoatMap([openStreetMapLayer, sailingAreaLayer, openSeaMapLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
     this.registerMouseInteraction();
   }
 
@@ -115,12 +113,6 @@ export class BoatMapController {
   }
 
   setVisibleLayers(layers: string[]) {
-    if(!layers.includes("BoatLayer")) {
-      layers.push("BoatLayer")
-    }
-    if(!layers.includes("SailingAreaLayer")) {
-      layers.push("SailingAreaLayer");
-    }
     this.boatMap.setVisibleLayers(layers);
   }
 

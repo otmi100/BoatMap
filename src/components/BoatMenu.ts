@@ -1,14 +1,15 @@
 import { Boat } from "./Boat";
-import { BoatMapController } from "../controllers/BoatMapController";
 import { BoatMenuController } from "../controllers/BoatMenuController";
 
 export class BoatMenu {
 
   private layers = [
-    { name: "OpenStreetMapLayer", innerHTML: "Basiskarte OpenStreetMap", inputElement: {} },
-    { name: "OpenSeaMapLayer", innerHTML: "OpenSeaMap Layer", inputElement: {} },
-    { name: "WeatherwarningLayer", innerHTML: "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)", inputElement: {} },
-    { name: "WindbarbLayer", innerHTML: "Zeige Windfahnen (Quelle: DWD)", inputElement: {} },
+    { name: "OpenStreetMapLayer", innerHTML: "Basiskarte OpenStreetMap", inputElement: {}, checkedDefault: true },
+    { name: "OpenSeaMapLayer", innerHTML: "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich", inputElement: {}, checkedDefault: false },
+    { name: "WeatherwarningLayer", innerHTML: "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)", inputElement: {}, checkedDefault: false },
+    { name: "WindbarbLayer", innerHTML: "Zeige Windfahnen (Quelle: DWD)", inputElement: {}, checkedDefault: false },
+    { name: "SailingAreaLayer", innerHTML: "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots", inputElement: {}, checkedDefault: true },
+    { name: "BoatLayer", innerHTML: "Zeige Segelboote des SUB", inputElement: {}, checkedDefault: true },
   ];
 
   private boatMenuController: BoatMenuController;
@@ -40,6 +41,9 @@ export class BoatMenu {
       var layerCheckBox = document.createElement("INPUT");
       layerCheckBox.setAttribute("type", "checkbox");
       layerCheckBox.setAttribute("id", layer.name);
+      if(layer.checkedDefault) {
+        layerCheckBox.setAttribute("checked", "true");
+      }
       layerLabel.appendChild(layerCheckBox);
       var caption = document.createElement("SPAN");
       caption.innerHTML = layer.innerHTML;

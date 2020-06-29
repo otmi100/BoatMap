@@ -29,7 +29,6 @@ export class SailingAreaLayer extends TileLayer {
       })
     });
     this.set("layerName", "SailingAreaLayer");
-    
   }
 
   showAreas(sailingAreas: string[]): void {
@@ -39,6 +38,6 @@ export class SailingAreaLayer extends TileLayer {
       'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'
     });
 
-
+    console.log(this);
   }
 }

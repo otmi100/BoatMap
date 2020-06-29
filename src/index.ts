@@ -13,4 +13,5 @@ window.onload = function () {
   boatMenuController = new BoatMenuController(boatsJson.boats);
   boatMapController.registerBoatMenuController(boatMenuController);
   boatMenuController.registerBoatMapController(boatMapController);
+  boatMenuController.updateLayerVisibilty();
 };
