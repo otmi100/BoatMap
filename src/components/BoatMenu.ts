@@ -16,8 +16,8 @@ export class BoatMenu {
 
   constructor(boats: Boat[], boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
-    this.generateLayerCheckboxes();
     this.generateBoatList(boats);
+    this.generateLayerCheckboxes();
   }
 
   generateBoatList(boats: Boat[]) {
