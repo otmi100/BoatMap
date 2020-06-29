@@ -1,58 +1,30 @@
 import "ol/ol.css";
 
-import OSM from "ol/source/OSM";
 import * as boatsJson from "./data/boats.json";
-import { BoatLayer } from "./components/layers/BoatLayer";
-import { SailingAreaLayer } from "./components/layers/SailingAreaLayer";
-import { WeatherwarningLayer } from "./components/layers/WeatherwarningLayer";
-import { OpenSeaMapLayer } from "./components/layers/OpenSeaMapLayer";
-import TileLayer from "ol/layer/Tile";
 import { BoatMenu } from "./components/BoatMenu";
-import { BoatMap } from "./components/BoatMap";
-import { WindbarbLayer } from "./components/layers/WindbarbLayer";
 import { BoatMapController } from "./controllers/BoatMapController";
 import { BoatMenuController } from "./controllers/BoatMenuController";
 
 
+
 var boatMenu: BoatMenu;
 
-var boatLayer = new BoatLayer(boatsJson.boats);
-var sailingAreaLayer = new SailingAreaLayer();
-var weatherwarningLayer = new WeatherwarningLayer();
-var openSeaMapLayer = new OpenSeaMapLayer();
-var openStreetMapLayer = new TileLayer({
-  source: new OSM(),
-});
-var windbarbLayer = new WindbarbLayer();
 
-const boatMap = new BoatMap([openSeaMapLayer, openStreetMapLayer, sailingAreaLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
 var boatMenuController: BoatMenuController;
 var boatMapController: BoatMapController;
 
 window.onload = function () {
-  boatMapController = new BoatMapController(boatsJson.boats, boatMap);
-  boatMenu = new BoatMenu(boatsJson.boats, boatMapController);
-  boatMenuController = new BoatMenuController(boatMenu);
+  boatMapController = new BoatMapController(boatsJson.boats);
+  boatMenuController = new BoatMenuController(boatsJson.boats);
   boatMapController.registerBoatMenuController(boatMenuController);
-  
-
+  boatMenuController.registerBoatMapController(boatMapController);
 };
 
 
 
 // Layer Switcher
-function openSeaMapLayerVisibility() {
-  if ((<HTMLInputElement>document.getElementById("seamaplayer")).checked) {
-    openSeaMapLayer.setVisible(true);
-  } else {
-    openSeaMapLayer.setVisible(false);
-  }
-}
-openSeaMapLayerVisibility();
-(<HTMLElement>document.getElementById("seamaplayer")).addEventListener(
-  "click",
-  openSeaMapLayerVisibility
-);
+/*
+
 
 function dwdwarningLayerVisibility() {
   if ((<HTMLInputElement>document.getElementById("dwdwarninglayer")).checked) {
@@ -62,10 +34,7 @@ function dwdwarningLayerVisibility() {
   }
 }
 dwdwarningLayerVisibility();
-(<HTMLElement>document.getElementById("dwdwarninglayer")).addEventListener(
-  "click",
-  dwdwarningLayerVisibility
-);
+(<HTMLElement>document.getElementById("dwdwarninglayer"))
 
 function osmLayerVisibility() {
   if ((<HTMLInputElement>document.getElementById("osmlayer")).checked) {
@@ -92,3 +61,4 @@ windbarblayerVisibility();
   "click",
   windbarblayerVisibility
 );
+*/

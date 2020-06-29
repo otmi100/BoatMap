@@ -1,37 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>SUB Boote</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div class="main">
-      <div id="map" class="map"></div>
-    </div>
-    <div class="menu">
-      <label class="switch">
-        <input type="checkbox" id="seamaplayer">
-        Zeige Seekarte<br>
-        Quelle: OpenSeaMap.org
-      </label><br />
-      <label class="switch">
-        <input type="checkbox" id="dwdwarninglayer">
-        Zeige Wetterwarnungen (Anzahl: <span id="warndingcount"></span><div id="spinner"></div>)<br>
-        Quelle: Deutscher Wetterdienst
-      </label><br />
-      <label class="switch">
-        <input type="checkbox" id="osmlayer">
-        Zeige OpenStreetMap
-        Quelle: OpenStreetMap.org
-      </label><br />
-      <label class="switch">
-        <input type="checkbox" id="windbarblayer">
-        Zeige Windfahnen
-        Quelle: Deutscher Wetterdienst
-      </label><br />
-      <ul id="boats"></ul>
-    </div>
-    <script src="./src/index.ts"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>SUB Boote</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+  <div class="main">
+    <div id="map" class="map"></div>
+  </div>
+  <div id="menu">
+    <div id="layerswitcher"></div>
+    <ul id="boats"></ul>
+  </div>
+  <script src="./src/index.ts"></script>
+</body>
+
 </html>

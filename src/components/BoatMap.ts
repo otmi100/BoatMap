@@ -37,7 +37,7 @@ export class BoatMap extends Map {
 
   }
 
-  getLayer(layername: string): BaseLayer | undefined {
+  getLayerByName(layername: string): BaseLayer | undefined {
     var foundLayer: BaseLayer | undefined;
     this.getLayers().forEach(layer => {
       if (layer.getProperties()["layerName"] == layername) {
@@ -45,5 +45,15 @@ export class BoatMap extends Map {
       }
     });
     return foundLayer;
+  }
+
+  setVisibleLayers(layers: string[]) {
+    this.getLayers().forEach(layer => {
+      if(layers.includes(layer.getProperties()["layerName"])) {
+        layer.setVisible(true);
+      } else {
+        layer.setVisible(false);
+      }
+    });
   }
 }

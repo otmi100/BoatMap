@@ -28,16 +28,15 @@ export class SailingAreaLayer extends VectorLayer {
     super({
       source: vectorSource,
       style: selectedStyle,
-      visible: false,
+      visible: true,
     });
 
     this.set("layerName", "SailingAreaLayer");
-    this.showAreas([]);
   }
 
   showAreas(sailingAreas: string[]): void {
-    this.setVisible(true);
     vectorSource.getFeatures().forEach((feature:Feature) => {
+      
       if (sailingAreas.some((sa) => sa === feature.getProperties()["name"])) {
         feature.setStyle(selectedStyle);
       } else {

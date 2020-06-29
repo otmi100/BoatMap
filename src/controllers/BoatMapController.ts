@@ -6,6 +6,10 @@ import { Boat } from "../components/Boat";
 import { BoatLayer } from "../components/layers/BoatLayer";
 import { BoatMenu } from "../components/BoatMenu";
 import { BoatMenuController } from "./BoatMenuController";
+import { WeatherwarningLayer } from "../components/layers/WeatherwarningLayer";
+import { OpenSeaMapLayer } from "../components/layers/OpenSeaMapLayer";
+import { OpenStreetMapLayer } from "../components/layers/OpenStreetMapLayer";
+import { WindbarbLayer } from "../components/layers/WindbarbLayer";
 
 export class BoatMapController {
 
@@ -14,11 +18,20 @@ export class BoatMapController {
   private boatMenuController: BoatMenuController | undefined;
   private boats: Boat[];
 
-  constructor(boats: Boat[], boatMap: BoatMap) {
+  constructor(boats: Boat[]) {
     this.boats = boats;
 
-    boatMap.on("click", (evt) => {
-      var feature = boatMap.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    var boatLayer = new BoatLayer(boats);
+    var sailingAreaLayer = new SailingAreaLayer();
+    var weatherwarningLayer = new WeatherwarningLayer();
+    var openSeaMapLayer = new OpenSeaMapLayer();
+    var openStreetMapLayer = new OpenStreetMapLayer();
+    var windbarbLayer = new WindbarbLayer();
+
+    this.boatMap = new BoatMap([openStreetMapLayer, openSeaMapLayer, sailingAreaLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
+
+    this.boatMap.on("click", (evt) => {
+      var feature = this.boatMap.forEachFeatureAtPixel(evt.pixel, function (feature) {
         return feature;
       });
       if (feature) {
@@ -38,13 +51,13 @@ export class BoatMapController {
     });
 
     // change mouse cursor when over marker
-    boatMap.on("pointermove", (e) => {
-      var pixel = boatMap.getEventPixel(e.originalEvent);
-      var hit = boatMap.hasFeatureAtPixel(pixel);
-      (<HTMLElement>boatMap.getTarget()).style.cursor = hit ? "pointer" : "";
+    this.boatMap.on("pointermove", (e) => {
+      var pixel = this.boatMap.getEventPixel(e.originalEvent);
+      var hit = this.boatMap.hasFeatureAtPixel(pixel);
+      (<HTMLElement>this.boatMap.getTarget()).style.cursor = hit ? "pointer" : "";
     });
 
-    this.boatMap = boatMap;
+    this.boatMap = this.boatMap;
   }
 
   registerBoatMenuController(boatMenuController: BoatMenuController) {
@@ -52,9 +65,8 @@ export class BoatMapController {
   }
 
   viewBoat(boatIndex: number) {
-    console.log(this.boatMap.getLayers());
-    var sailingAreaLayer = <SailingAreaLayer>this.boatMap.getLayer("SailingAreaLayer");
-    var boatLayer = <BoatLayer>this.boatMap.getLayer("BoatLayer");
+    var sailingAreaLayer = <SailingAreaLayer>this.boatMap.getLayerByName("SailingAreaLayer");
+    var boatLayer = <BoatLayer>this.boatMap.getLayerByName("BoatLayer");
 
     if (boatIndex == this.selectedBoatIndex) {
       this.selectedBoatIndex = -1; // Delesect Boat
@@ -72,8 +84,6 @@ export class BoatMapController {
       console.log("Boat with id " + boatIndex + " not found.");
       return;
     }
-
-    console.log(this.boatMap);
     boatLayer.highlightBoat(this.selectedBoatIndex);
     if(this.boatMenuController) {
       this.boatMenuController.styleBoatMenu(this.selectedBoatIndex);
@@ -99,4 +109,16 @@ export class BoatMapController {
     });
 
   }
+
+  setVisibleLayers(layers: string[]) {
+    if(!layers.includes("BoatLayer")) {
+      layers.push("BoatLayer")
+    }
+    if(!layers.includes("SailingAreaLayer")) {
+      layers.push("SailingAreaLayer");
+    }
+    this.boatMap.setVisibleLayers(layers);
+  }
+
+
 }
