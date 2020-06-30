@@ -17,7 +17,11 @@ pipelines:
         name: Deploy to production
         deployment: Production
         trigger: manual
+        caches:
+          - node
         script:
+          - npm install
+          - npm run build
           - pipe: atlassian/ftp-deploy:0.3.3
             variables:
               USER: $user
