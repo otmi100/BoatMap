@@ -2,6 +2,35 @@
   width: 20%;
   float: left;
 }
+
+#menu #layerswitcher {
+  border: 3px solid grey;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 10px;
+}
+
+#menu #boats {
+  border: 3px solid grey;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 0px;
+}
+
+#menu #boats li {
+  list-style-type: none;
+  border: 1px solid black;
+  margin-bottom: 10 px;
+  cursor: pointer;
+  margin: 5px;
+  padding: 0px;
+}
+
+#menu #boats li.active {
+  border: 1px solid blue;
+  background-color: deepskyblue;
+}
+
 .main {
   width: 75%;
   float: left;
@@ -18,22 +47,7 @@
   height: 800px;
 }
 
-#boats {
-  margin: 0px;
-  padding: 5px;
-}
 
-#boats li {
-  list-style-type: none;
-  border: 1px solid black;
-  margin-bottom: 10 px;
-  cursor: pointer;
-}
-
-#boats li.active {
-  border: 1px solid blue;
-  background-color: deepskyblue;
-}
 
 
 /* Code for "loader" animation 
