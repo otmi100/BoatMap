@@ -1,6 +1,7 @@
 import { Style, Fill } from "ol/style";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
+import Projection from "ol/proj/Projection";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -16,7 +17,7 @@ const unselectedStyle = new Style({
 
 export class SailingAreaLayer extends TileLayer {
 
-  constructor() {
+  constructor(projection: Projection) {
 
     super({
       source: new TileWMS({
@@ -25,7 +26,7 @@ export class SailingAreaLayer extends TileLayer {
         attributions: '© Michel Otto',
         params: {'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon'},
         serverType: 'geoserver',
-        
+        projection: projection.getCode(),
       })
     });
     this.set("layerName", "SailingAreaLayer");

@@ -2,16 +2,17 @@ import { Map, View } from "ol";
 import Layer from "ol/layer/Layer";
 import { fromLonLat } from "ol/proj";
 import BaseLayer from "ol/layer/Base";
+import Projection from "ol/proj/Projection";
 
 export class BoatMap extends Map {
-  constructor(layers: Layer[]) {
+  constructor(layers: Layer[], projection: Projection) {
     super({
       target: <HTMLElement>document.getElementById("map"),
       layers: layers,
       view: new View({
         center: [982062.938921, 6997962.81318],
         zoom: 8,
-        projection: "EPSG:3857",
+        projection: projection.getCode(),
       }),
     });
 

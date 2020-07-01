@@ -21,7 +21,6 @@ export class BoatMenuController {
   
   updateLayerVisibilty() : void {
     let visibleLayers:string[] = [];
-    console.log(this.boatMenu.getLayers());
     this.boatMenu.getLayers().forEach(layer => {
       if((<HTMLInputElement>layer.inputElement).checked) {
         visibleLayers.push(layer.name);

@@ -8,6 +8,9 @@ import { WeatherwarningLayer } from "../components/layers/WeatherwarningLayer";
 import { OpenSeaMapLayer } from "../components/layers/OpenSeaMapLayer";
 import { OpenStreetMapLayer } from "../components/layers/OpenStreetMapLayer";
 import { WindbarbLayer } from "../components/layers/WindbarbLayer";
+import Projection from "ol/proj/Projection";
+
+const projection = new Projection({ code: "EPSG:3857" });
 
 export class BoatMapController {
 
@@ -19,14 +22,14 @@ export class BoatMapController {
   constructor(boats: Boat[]) {
     this.boats = boats;
 
-    var boatLayer = new BoatLayer(boats);
-    var sailingAreaLayer = new SailingAreaLayer();
-    var weatherwarningLayer = new WeatherwarningLayer();
+    var boatLayer = new BoatLayer(boats, projection);
+    var sailingAreaLayer = new SailingAreaLayer(projection);
+    var weatherwarningLayer = new WeatherwarningLayer(projection);
     var openSeaMapLayer = new OpenSeaMapLayer();
     var openStreetMapLayer = new OpenStreetMapLayer();
-    var windbarbLayer = new WindbarbLayer();
+    var windbarbLayer = new WindbarbLayer(projection);
 
-    this.boatMap = new BoatMap([openStreetMapLayer, sailingAreaLayer, openSeaMapLayer, weatherwarningLayer, windbarbLayer, boatLayer]);
+    this.boatMap = new BoatMap([openStreetMapLayer, sailingAreaLayer, openSeaMapLayer, weatherwarningLayer, windbarbLayer, boatLayer], projection);
     this.registerMouseInteraction();
   }
 

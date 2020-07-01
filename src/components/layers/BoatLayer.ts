@@ -7,6 +7,7 @@ import { fromLonLat } from "ol/proj";
 import boatlogo from "../../data/img/boat.svg";
 import IconAnchorUnits from "ol/style/IconAnchorUnits";
 import { Boat } from "../Boat";
+import Projection from "ol/proj/Projection";
 
 var boatFeatures:Feature[] = [];
 
@@ -35,12 +36,12 @@ const iconStyleFocused = new Style({
 
 
 export class BoatLayer extends VectorLayer {
-  constructor(boats: Boat[]) {
+  constructor(boats: Boat[], projection: Projection) {
 
 
     boats.forEach((boat, boatIndex) => {
       var boatFeature = new Feature({
-        geometry: new Point(fromLonLat([boat.location.lon, boat.location.lat])),
+        geometry: new Point(fromLonLat([boat.location.lon, boat.location.lat],projection)),
         name: boat.name,
       });
       boatFeature.setStyle(iconStyleFocused);

@@ -4,11 +4,12 @@ import { Style, Stroke, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
 import WFS from "ol/format/WFS";
 import { Feature } from "ol";
+import Projection from "ol/proj/Projection";
 
 export class WeatherwarningLayer extends VectorLayer {
-  constructor() {
+  constructor(projection: Projection) {
     var featureRequest = new WFS().writeGetFeature({
-      srsName: "EPSG:3857",
+      srsName: projection.getCode(),
       featureNS: "https://maps.dwd.de/geoserver/dwd/ows",
       featurePrefix: "dwd",
       featureTypes: ["Warnungen_Gemeinden"],
