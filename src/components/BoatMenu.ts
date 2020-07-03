@@ -1,26 +1,32 @@
-import { Boat } from "./Boat";
+import { IBoat } from "./IBoat";
 import { BoatMenuController } from "../controllers/BoatMenuController";
+import { OpenSeaMapLayer } from "./layers/OpenSeaMapLayer";
+import { WeatherwarningLayer } from "./layers/WeatherwarningLayer";
+import { BoatLayer } from "./layers/BoatLayer";
+import { SailingAreaLayer } from "./layers/SailingAreaLayer";
+import { WindbarbLayer } from "./layers/WindbarbLayer";
+import { OpenStreetMapLayer } from "./layers/OpenStreetMapLayer";
 
 export class BoatMenu {
 
   private layers = [
-    { name: "OpenStreetMapLayer", innerHTML: "Basiskarte OpenStreetMap", inputElement: {}, checkedDefault: true },
-    { name: "OpenSeaMapLayer", innerHTML: "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich", inputElement: {}, checkedDefault: false },
-    { name: "WeatherwarningLayer", innerHTML: "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)", inputElement: {}, checkedDefault: false },
-    { name: "WindbarbLayer", innerHTML: "Zeige Windfahnen (Quelle: DWD)", inputElement: {}, checkedDefault: false },
-    { name: "SailingAreaLayer", innerHTML: "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots", inputElement: {}, checkedDefault: true },
-    { name: "BoatLayer", innerHTML: "Zeige Segelboote des SUB", inputElement: {}, checkedDefault: true },
+    { name: OpenStreetMapLayer.name, innerHTML: "Basiskarte OpenStreetMap", inputElement: {}, checkedDefault: true },
+    { name: OpenSeaMapLayer.name, innerHTML: "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich)", inputElement: {}, checkedDefault: false },
+    { name: WeatherwarningLayer.name, innerHTML: "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)", inputElement: {}, checkedDefault: false },
+    { name: WindbarbLayer.name, innerHTML: "Zeige Windfahnen (Quelle: DWD)", inputElement: {}, checkedDefault: false },
+    { name: SailingAreaLayer.name, innerHTML: "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots", inputElement: {}, checkedDefault: true },
+    { name: BoatLayer.name, innerHTML: "Zeige Segelboote des SUB", inputElement: {}, checkedDefault: true },
   ];
 
   private boatMenuController: BoatMenuController;
 
-  constructor(boats: Boat[], boatMenuController: BoatMenuController) {
+  constructor(boats: IBoat[], boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
     this.generateBoatList(boats);
     this.generateLayerCheckboxes();
   }
 
-  generateBoatList(boats: Boat[]) {
+  generateBoatList(boats: IBoat[]) {
     const boatList = document.getElementById("boats");
     if (boatList) {
       boats.forEach((boat, index) => {

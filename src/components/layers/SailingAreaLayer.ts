@@ -2,6 +2,7 @@ import { Style, Fill } from "ol/style";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import Projection from "ol/proj/Projection";
+import { ILayer } from "../ILayer";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -15,7 +16,7 @@ const unselectedStyle = new Style({
   }),
 });
 
-export class SailingAreaLayer extends TileLayer {
+export class SailingAreaLayer extends TileLayer implements ILayer {
 
   constructor(projection: Projection) {
 
@@ -29,7 +30,10 @@ export class SailingAreaLayer extends TileLayer {
         projection: projection.getCode(),
       })
     });
-    this.set("layerName", "SailingAreaLayer");
+    this.set("layerName", SailingAreaLayer.name);
+  }
+  handleClick(number: import("ol/Feature").FeatureLike): void {
+    throw new Error("Method not implemented.");
   }
 
   showAreas(sailingAreas: string[]): void {

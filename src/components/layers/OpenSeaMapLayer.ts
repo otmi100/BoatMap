@@ -1,7 +1,9 @@
 import TileLayer from "ol/layer/Tile";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
+import { ILayer } from "../ILayer";
+import { FeatureLike } from "ol/Feature";
 
-export class OpenSeaMapLayer extends TileLayer {
+export class OpenSeaMapLayer extends TileLayer implements ILayer {
   constructor() {
     super({
       source: new OSM({
@@ -15,6 +17,9 @@ export class OpenSeaMapLayer extends TileLayer {
       }),
       visible: false,
     });
-    this.set("layerName", "OpenSeaMapLayer");
+    this.set("layerName", OpenSeaMapLayer.name);
+  }
+  handleClick(number: FeatureLike): void {
+    throw new Error("Method not implemented.");
   }
 }

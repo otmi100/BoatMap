@@ -5,8 +5,11 @@ import GeoJSON from "ol/format/GeoJSON";
 import WFS from "ol/format/WFS";
 import { Feature } from "ol";
 import Projection from "ol/proj/Projection";
+import { ILayer } from "../ILayer";
+import { FeatureLike } from "ol/Feature";
 
-export class WeatherwarningLayer extends VectorLayer {
+export class WeatherwarningLayer extends VectorLayer implements ILayer {
+
   constructor(projection: Projection) {
     var featureRequest = new WFS().writeGetFeature({
       srsName: projection.getCode(),
@@ -36,7 +39,7 @@ export class WeatherwarningLayer extends VectorLayer {
                 }),
               })
             );
-            feature.set("featureType", "dwdWarning");
+            feature.set("fromLayer", WeatherwarningLayer.name);
           });
           vectorSource.addFeatures(features);
         } else {
@@ -64,7 +67,14 @@ export class WeatherwarningLayer extends VectorLayer {
       }),
     });
 
-    this.set("layerName", "WeatherwarningLayer");
+    this.set("layerName", WeatherwarningLayer.name);
+  }
+  handleClick(feature: FeatureLike): void {
+    alert(
+      feature.getProperties()["SEVERITY"] +
+      ": " +
+      feature.getProperties()["DESCRIPTION"]
+    );
   }
 
   private getColorCode(feature: Feature): string {

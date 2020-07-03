@@ -1,4 +1,4 @@
-export interface Boat {
+export interface IBoat {
   name: string;
   type: string;
   sailingareas: string[];

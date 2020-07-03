@@ -1,13 +1,16 @@
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Fill, Stroke, Style, Text, Icon } from "ol/style";
-import { Map, View, Feature } from "ol";
+import { Style, Icon } from "ol/style";
+import { Feature } from "ol";
 import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
 import boatlogo from "../../data/img/boat.svg";
 import IconAnchorUnits from "ol/style/IconAnchorUnits";
-import { Boat } from "../Boat";
+import { ILayer } from "../ILayer";
 import Projection from "ol/proj/Projection";
+import { IBoat } from "../IBoat";
+import { FeatureLike } from "ol/Feature";
+
 
 var boatFeatures:Feature[] = [];
 
@@ -35,9 +38,9 @@ const iconStyleFocused = new Style({
 
 
 
-export class BoatLayer extends VectorLayer {
-  constructor(boats: Boat[], projection: Projection) {
+export class BoatLayer extends VectorLayer implements ILayer {
 
+  constructor(boats: IBoat[], projection: Projection) {
 
     boats.forEach((boat, boatIndex) => {
       var boatFeature = new Feature({
@@ -46,7 +49,7 @@ export class BoatLayer extends VectorLayer {
       });
       boatFeature.setStyle(iconStyleFocused);
       boatFeature.setId(boatIndex);
-      boatFeature.set("featureType", "sailingboat");
+      boatFeature.set("fromLayer", BoatLayer.name); 
       boatFeature.set("boatname", boat.name);
       boatFeatures.push(boatFeature);
     });
@@ -60,7 +63,11 @@ export class BoatLayer extends VectorLayer {
     });
 
 
-    this.set("layerName", "BoatLayer");
+    this.set("layerName", BoatLayer.name);
+  }
+
+  handleClick(feature: FeatureLike): void {
+
   }
 
   highlightBoat(boatIndex:number): void {

@@ -1,12 +1,12 @@
 import { BoatMenu } from "../components/BoatMenu";
-import { Boat } from "../components/Boat";
+import { IBoat } from "../components/IBoat";
 import { BoatMapController } from "./BoatMapController";
 
 export class BoatMenuController {
   private boatMenu: BoatMenu;
   private boatMapController: BoatMapController | undefined;
 
-  constructor(boats: Boat[]) {
+  constructor(boats: IBoat[]) {
     this.boatMenu = new BoatMenu(boats, this);
     this.updateLayerVisibilty();
   }

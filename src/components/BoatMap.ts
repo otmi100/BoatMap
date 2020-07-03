@@ -3,9 +3,13 @@ import Layer from "ol/layer/Layer";
 import { fromLonLat } from "ol/proj";
 import BaseLayer from "ol/layer/Base";
 import Projection from "ol/proj/Projection";
+import { BoatMapController } from "src/controllers/BoatMapController";
 
 export class BoatMap extends Map {
-  constructor(layers: Layer[], projection: Projection) {
+
+  private boatMapController: BoatMapController;
+
+  constructor(layers: Layer[], projection: Projection, boatMapController: BoatMapController) {
     super({
       target: <HTMLElement>document.getElementById("map"),
       layers: layers,
@@ -16,6 +20,26 @@ export class BoatMap extends Map {
       }),
     });
 
+    this.boatMapController = boatMapController;
+    this.registerMouseInteraction();
+  }
+
+  registerMouseInteraction() {
+    this.on("click", (evt) => {
+      var feature = this.forEachFeatureAtPixel(evt.pixel, function (feature) {
+        return feature;
+      });
+      if (feature) {
+        this.boatMapController.featureClick(feature);
+      }
+    });
+
+    // change mouse cursor when over marker
+    this.on("pointermove", (e) => {
+      var pixel = this.getEventPixel(e.originalEvent);
+      var hit = this.hasFeatureAtPixel(pixel);
+      (<HTMLElement>this.getTarget()).style.cursor = hit ? "pointer" : "";
+    });
   }
 
   defaultZoomAndFocus() {
@@ -50,7 +74,7 @@ export class BoatMap extends Map {
 
   setVisibleLayers(layers: string[]) {
     this.getLayers().forEach(layer => {
-      if(layers.includes(layer.getProperties()["layerName"])) {
+      if (layers.includes(layer.getProperties()["layerName"])) {
         layer.setVisible(true);
       } else {
         layer.setVisible(false);

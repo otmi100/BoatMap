@@ -1,8 +1,9 @@
 import TileWMS from 'ol/source/TileWMS';
 import TileLayer from "ol/layer/Tile";
 import Projection from 'ol/proj/Projection';
+import { ILayer } from '../ILayer';
 
-export class WindbarbLayer extends TileLayer {
+export class WindbarbLayer extends TileLayer implements ILayer {
   constructor(projection: Projection) {
     super({
       source: new TileWMS({
@@ -15,6 +16,9 @@ export class WindbarbLayer extends TileLayer {
         
       })
     });
-    this.set("layerName", "WindbarbLayer");
+    this.set("layerName", WindbarbLayer.name);
+  }
+  handleClick(number: import("ol/Feature").FeatureLike): void {
+    throw new Error("Method not implemented.");
   }
 }
