@@ -25,17 +25,17 @@ export class BoatMapController {
     this.boatMap = new BoatMap(Array.from(this.layers.values()), projection, this);
   }
 
-  registerBoatMenuController(boatMenuController: BoatMenuController) {
+  registerBoatMenuController(boatMenuController: BoatMenuController): void {
     this.boatMenuController = boatMenuController;
   }
 
 
-  viewBoat(boatIndex: number) {
+  viewBoat(boatIndex: number): void {
     var sailingAreaLayer = <SailingAreaLayer>this.layers.get(SailingAreaLayer.name);
     var boatLayer = <BoatLayer>this.layers.get(BoatLayer.name);
 
     if (boatIndex == this.selectedBoatIndex) { // Delesect Boat & hide areas
-      this.selectedBoatIndex = -1; 
+      this.selectedBoatIndex = -1;
       sailingAreaLayer.showAreas([]);
       this.defaultZoomAndFocus();
     } else if (this.boats[boatIndex]) { // select boat, area and focus
@@ -52,7 +52,7 @@ export class BoatMapController {
     }
   }
 
-  defaultZoomAndFocus() {
+  defaultZoomAndFocus(): void {
     this.boatMap.getView().animate({
       // zoom out
       center: [982062.938921, 6997962.81318],
@@ -61,7 +61,7 @@ export class BoatMapController {
     });
   }
 
-  focus(lon: number, lat: number) {
+  focus(lon: number, lat: number): void {
     this.boatMap.getView().animate({
       center: fromLonLat([
         lon,
@@ -72,17 +72,17 @@ export class BoatMapController {
 
   }
 
-  setVisibleLayers(layers: string[]) {
+  setVisibleLayers(layers: string[]): void {
     this.boatMap.setVisibleLayers(layers);
   }
 
-  featureClick(feature: FeatureLike) {
+  featureClick(feature: FeatureLike): void {
     let layer = this.layers.get(feature.get("fromLayer"));
     console.log(layer);
     if (layer) {
       (layer as unknown as ILayer).handleClick(feature);
-    } 
-    
+    }
+
     if (feature.get("fromLayer") == BoatLayer.name) {
       this.viewBoat(<number>feature.getId());
     }

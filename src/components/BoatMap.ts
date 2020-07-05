@@ -23,7 +23,7 @@ export class BoatMap extends Map {
     this.registerMouseInteraction();
   }
 
-  registerMouseInteraction() {
+  registerMouseInteraction(): void {
     this.on("click", (evt) => {
       var feature = this.forEachFeatureAtPixel(evt.pixel, function (feature) {
         return feature;
@@ -41,7 +41,7 @@ export class BoatMap extends Map {
     });
   }
 
-  defaultZoomAndFocus() {
+  defaultZoomAndFocus(): void {
     this.getView().animate({
       // zoom out
       center: [982062.938921, 6997962.81318],
@@ -50,7 +50,7 @@ export class BoatMap extends Map {
     });
   }
 
-  focus(lon: number, lat: number) {
+  focus(lon: number, lat: number): void {
     this.getView().animate({
       center: fromLonLat([
         lon,
@@ -61,7 +61,7 @@ export class BoatMap extends Map {
 
   }
 
-  setVisibleLayers(layers: string[]) {
+  setVisibleLayers(layers: string[]): void {
     this.getLayers().forEach(layer => {
       if (layers.includes(layer.getProperties()["layerName"])) {
         layer.setVisible(true);

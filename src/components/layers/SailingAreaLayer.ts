@@ -52,7 +52,5 @@ export class SailingAreaLayer extends TileLayer implements ILayer {
       'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon',
       'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'
     });
-
-    console.log(this);
   }
 }

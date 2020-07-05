@@ -19,11 +19,11 @@ export class BoatMenuController {
     this.updateLayerVisibilty();
   }
 
-  viewBoatOnMap(boatIndex: number) {
+  viewBoatOnMap(boatIndex: number) : void {
     this.boatMapController?.viewBoat(boatIndex);
   }
 
-  styleBoatMenu(selectedBoatIndex: number) {
+  styleBoatMenu(selectedBoatIndex: number) : void {
     this.boatMenu.styleBoatMenu(selectedBoatIndex);
   }
   

@@ -5,14 +5,12 @@ import { ILayer } from "../interfaces/ILayer";
 export class BoatMenu {
 
   private boatMenuController: BoatMenuController;
-  private layers: ILayer[];
   private layerControlers:Map<string,HTMLInputElement> = new Map();
 
   constructor(boats: IBoat[], layers: ILayer[], boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
-    this.layers = layers;
     this.generateBoatList(boats);
-    this.generateLayerCheckboxes();
+    this.generateLayerCheckboxes(layers);
   }
 
   generateBoatList(boats: IBoat[]) {
@@ -29,9 +27,9 @@ export class BoatMenu {
     }
   }
 
-  generateLayerCheckboxes() {
+  generateLayerCheckboxes(layers: ILayer[]) {
     const switcherElements = document.getElementById("layerswitcher");
-    this.layers.forEach(layer => {
+    layers.forEach(layer => {
       var layerLabel = document.createElement("label");
       var layerCheckBox = document.createElement("INPUT");
       layerCheckBox.setAttribute("type", "checkbox");
@@ -65,7 +63,7 @@ export class BoatMenu {
     }
   }
 
-  getBoatItems() {
+  getBoatItems() : HTMLCollectionOf<HTMLLIElement> {
     return (<HTMLElement>document.getElementById("boats")).getElementsByTagName(
       "li"
     );
