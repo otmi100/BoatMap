@@ -1,12 +1,12 @@
+import { Feature } from "ol";
+import WFS from "ol/format/WFS";
+import GeoJSON from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Style, Stroke, Fill } from "ol/style";
-import GeoJSON from "ol/format/GeoJSON";
-import WFS from "ol/format/WFS";
-import { Feature } from "ol";
 import Projection from "ol/proj/Projection";
-import { ILayer } from "../ILayer";
 import { FeatureLike } from "ol/Feature";
+import { ILayer } from "../../interfaces/ILayer";
 
 export class WeatherwarningLayer extends VectorLayer implements ILayer {
 
@@ -69,6 +69,17 @@ export class WeatherwarningLayer extends VectorLayer implements ILayer {
 
     this.set("layerName", WeatherwarningLayer.name);
   }
+
+  getName(): string {
+    return WeatherwarningLayer.name;
+  }
+  getMenuHtml(): string {
+    return "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)";
+  }
+  getCheckedDefault(): boolean {
+    return false;
+  }
+
   handleClick(feature: FeatureLike): void {
     alert(
       feature.getProperties()["SEVERITY"] +

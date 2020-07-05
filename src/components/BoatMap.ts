@@ -1,9 +1,8 @@
 import { Map, View } from "ol";
 import Layer from "ol/layer/Layer";
 import { fromLonLat } from "ol/proj";
-import BaseLayer from "ol/layer/Base";
 import Projection from "ol/proj/Projection";
-import { BoatMapController } from "src/controllers/BoatMapController";
+import { BoatMapController } from "../controllers/BoatMapController";
 
 export class BoatMap extends Map {
 
@@ -60,16 +59,6 @@ export class BoatMap extends Map {
       duration: 2000,
     });
 
-  }
-
-  getLayerByName(layername: string): BaseLayer | undefined {
-    var foundLayer: BaseLayer | undefined;
-    this.getLayers().forEach(layer => {
-      if (layer.getProperties()["layerName"] == layername) {
-        foundLayer = layer;
-      }
-    });
-    return foundLayer;
   }
 
   setVisibleLayers(layers: string[]) {

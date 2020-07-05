@@ -1,15 +1,15 @@
+import { Feature } from "ol";
+import { FeatureLike } from "ol/Feature";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Style, Icon } from "ol/style";
-import { Feature } from "ol";
+import IconAnchorUnits from "ol/style/IconAnchorUnits";
 import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
-import boatlogo from "../../data/img/boat.svg";
-import IconAnchorUnits from "ol/style/IconAnchorUnits";
-import { ILayer } from "../ILayer";
 import Projection from "ol/proj/Projection";
-import { IBoat } from "../IBoat";
-import { FeatureLike } from "ol/Feature";
+import boatlogo from "../../data/img/boat.svg";
+import { ILayer } from "../../interfaces/ILayer";
+import { IBoat } from "../../interfaces/IBoat";
 
 
 var boatFeatures:Feature[] = [];
@@ -66,6 +66,15 @@ export class BoatLayer extends VectorLayer implements ILayer {
     this.set("layerName", BoatLayer.name);
   }
 
+  getName(): string {
+    return BoatLayer.name;
+  }
+  getMenuHtml(): string {
+    return "Zeige Segelboote des SUB";
+  }
+  getCheckedDefault(): boolean {
+    return true;
+  }
   handleClick(feature: FeatureLike): void {
 
   }

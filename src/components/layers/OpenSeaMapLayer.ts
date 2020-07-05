@@ -1,7 +1,7 @@
 import TileLayer from "ol/layer/Tile";
-import OSM, { ATTRIBUTION } from "ol/source/OSM";
-import { ILayer } from "../ILayer";
 import { FeatureLike } from "ol/Feature";
+import OSM, { ATTRIBUTION } from "ol/source/OSM";
+import { ILayer } from "../../interfaces/ILayer";
 
 export class OpenSeaMapLayer extends TileLayer implements ILayer {
   constructor() {
@@ -19,7 +19,16 @@ export class OpenSeaMapLayer extends TileLayer implements ILayer {
     });
     this.set("layerName", OpenSeaMapLayer.name);
   }
-  handleClick(number: FeatureLike): void {
-    throw new Error("Method not implemented.");
+  getName(): string {
+    return OpenSeaMapLayer.name;
+  }
+  getMenuHtml(): string {
+    return "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich)";
+  }
+  getCheckedDefault(): boolean {
+    return false;
+  }
+  handleClick(feature: FeatureLike): void {
+
   }
 }

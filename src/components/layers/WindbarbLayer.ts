@@ -1,7 +1,8 @@
 import TileWMS from 'ol/source/TileWMS';
 import TileLayer from "ol/layer/Tile";
 import Projection from 'ol/proj/Projection';
-import { ILayer } from '../ILayer';
+import { FeatureLike } from 'ol/Feature';
+import { ILayer } from '../../interfaces/ILayer';
 
 export class WindbarbLayer extends TileLayer implements ILayer {
   constructor(projection: Projection) {
@@ -18,7 +19,17 @@ export class WindbarbLayer extends TileLayer implements ILayer {
     });
     this.set("layerName", WindbarbLayer.name);
   }
-  handleClick(number: import("ol/Feature").FeatureLike): void {
-    throw new Error("Method not implemented.");
+  getName(): string {
+    return WindbarbLayer.name;
   }
+  getMenuHtml(): string {
+    return "Zeige Windfahnen (Quelle: DWD)";
+  }
+  getCheckedDefault(): boolean {
+    return false;
+  }
+  handleClick(feature: FeatureLike): void {
+
+  }
+
 }

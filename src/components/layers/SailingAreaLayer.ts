@@ -2,7 +2,8 @@ import { Style, Fill } from "ol/style";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import Projection from "ol/proj/Projection";
-import { ILayer } from "../ILayer";
+import { FeatureLike } from "ol/Feature";
+import { ILayer } from "../../interfaces/ILayer";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -32,8 +33,17 @@ export class SailingAreaLayer extends TileLayer implements ILayer {
     });
     this.set("layerName", SailingAreaLayer.name);
   }
-  handleClick(number: import("ol/Feature").FeatureLike): void {
-    throw new Error("Method not implemented.");
+  getName(): string {
+    return SailingAreaLayer.name;
+  }
+  getMenuHtml(): string {
+    return "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots";
+  }
+  getCheckedDefault(): boolean {
+    return true;
+  }
+  handleClick(feature: FeatureLike): void {
+
   }
 
   showAreas(sailingAreas: string[]): void {

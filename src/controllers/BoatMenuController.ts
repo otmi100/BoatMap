@@ -1,17 +1,25 @@
 import { BoatMenu } from "../components/BoatMenu";
-import { IBoat } from "../components/IBoat";
+import { IBoat } from "../interfaces/IBoat";
 import { BoatMapController } from "./BoatMapController";
+import { Layer } from "ol/layer";
+import { ILayer } from "../interfaces/ILayer";
 
 export class BoatMenuController {
   private boatMenu: BoatMenu;
   private boatMapController: BoatMapController | undefined;
+  private layers: Map<String, Layer>;
 
-  constructor(boats: IBoat[]) {
-    this.boatMenu = new BoatMenu(boats, this);
+  constructor(boats: IBoat[], layers: Map<String, Layer>) {
+    this.layers = layers;
+    let interfaceLayers: ILayer[] = []; 
+    layers.forEach ( layer => {
+      interfaceLayers.push(<ILayer><unknown>layer);
+    })
+    this.boatMenu = new BoatMenu(boats, interfaceLayers, this);
     this.updateLayerVisibilty();
   }
 
-  viewBoat(boatIndex: number) {
+  viewBoatOnMap(boatIndex: number) {
     this.boatMapController?.viewBoat(boatIndex);
   }
 
@@ -21,9 +29,9 @@ export class BoatMenuController {
   
   updateLayerVisibilty() : void {
     let visibleLayers:string[] = [];
-    this.boatMenu.getLayers().forEach(layer => {
-      if((<HTMLInputElement>layer.inputElement).checked) {
-        visibleLayers.push(layer.name);
+    this.layers.forEach(layer => {
+      if(this.boatMenu.isLayerChecked(layer.getProperties()["layerName"])) {
+        visibleLayers.push(layer.getProperties()["layerName"]);
       }
     });
     this.boatMapController?.setVisibleLayers(visibleLayers);

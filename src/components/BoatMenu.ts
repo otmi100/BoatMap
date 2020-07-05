@@ -1,27 +1,16 @@
-import { IBoat } from "./IBoat";
+import { IBoat } from "../interfaces/IBoat";
 import { BoatMenuController } from "../controllers/BoatMenuController";
-import { OpenSeaMapLayer } from "./layers/OpenSeaMapLayer";
-import { WeatherwarningLayer } from "./layers/WeatherwarningLayer";
-import { BoatLayer } from "./layers/BoatLayer";
-import { SailingAreaLayer } from "./layers/SailingAreaLayer";
-import { WindbarbLayer } from "./layers/WindbarbLayer";
-import { OpenStreetMapLayer } from "./layers/OpenStreetMapLayer";
+import { ILayer } from "../interfaces/ILayer";
 
 export class BoatMenu {
 
-  private layers = [
-    { name: OpenStreetMapLayer.name, innerHTML: "Basiskarte OpenStreetMap", inputElement: {}, checkedDefault: true },
-    { name: OpenSeaMapLayer.name, innerHTML: "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich)", inputElement: {}, checkedDefault: false },
-    { name: WeatherwarningLayer.name, innerHTML: "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)", inputElement: {}, checkedDefault: false },
-    { name: WindbarbLayer.name, innerHTML: "Zeige Windfahnen (Quelle: DWD)", inputElement: {}, checkedDefault: false },
-    { name: SailingAreaLayer.name, innerHTML: "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots", inputElement: {}, checkedDefault: true },
-    { name: BoatLayer.name, innerHTML: "Zeige Segelboote des SUB", inputElement: {}, checkedDefault: true },
-  ];
-
   private boatMenuController: BoatMenuController;
+  private layers: ILayer[];
+  private layerControlers:Map<string,HTMLInputElement> = new Map();
 
-  constructor(boats: IBoat[], boatMenuController: BoatMenuController) {
+  constructor(boats: IBoat[], layers: ILayer[], boatMenuController: BoatMenuController) {
     this.boatMenuController = boatMenuController;
+    this.layers = layers;
     this.generateBoatList(boats);
     this.generateLayerCheckboxes();
   }
@@ -34,7 +23,7 @@ export class BoatMenu {
         boatEntry.appendChild(document.createTextNode(boat.name));
         boatEntry.appendChild(document.createElement("BR"));
         boatEntry.appendChild(document.createTextNode(boat.type));
-        boatEntry.onclick = () => this.boatMenuController.viewBoat(index);
+        boatEntry.onclick = () => this.boatMenuController.viewBoatOnMap(index);
         boatList.appendChild(boatEntry);
       });
     }
@@ -46,16 +35,16 @@ export class BoatMenu {
       var layerLabel = document.createElement("label");
       var layerCheckBox = document.createElement("INPUT");
       layerCheckBox.setAttribute("type", "checkbox");
-      layerCheckBox.setAttribute("id", layer.name);
-      if(layer.checkedDefault) {
+      layerCheckBox.setAttribute("id", layer.getName());
+      if(layer.getCheckedDefault()) {
         layerCheckBox.setAttribute("checked", "true");
       }
       layerLabel.appendChild(layerCheckBox);
       var caption = document.createElement("SPAN");
-      caption.innerHTML = layer.innerHTML;
+      caption.innerHTML = layer.getMenuHtml();
       layerLabel.appendChild(caption);
       layerCheckBox.onclick = () => this.boatMenuController.updateLayerVisibilty();
-      layer.inputElement = layerCheckBox;
+      this.layerControlers.set(layer.getName(), <HTMLInputElement>layerCheckBox);
       switcherElements?.appendChild(layerLabel);
       switcherElements?.appendChild(document.createElement("BR"));
 
@@ -82,7 +71,12 @@ export class BoatMenu {
     );
   }
 
-  getLayers() {
-    return this.layers;
+  isLayerChecked(layername: string) : boolean {
+    let checkBox = this.layerControlers.get(layername);
+    if(checkBox) {
+      return (<HTMLInputElement>this.layerControlers.get(layername)).checked;
+    } else {
+      return false;
+    }
   }
 }
