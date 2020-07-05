@@ -6,9 +6,13 @@ import VectorSource from "ol/source/Vector";
 import { Style, Stroke, Fill } from "ol/style";
 import Projection from "ol/proj/Projection";
 import { FeatureLike } from "ol/Feature";
-import { ILayer } from "../../interfaces/ILayer";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { Layer } from "ol/layer";
+import Source from "ol/source/Source";
 
-export class WeatherwarningLayer extends VectorLayer implements ILayer {
+export class WeatherwarningLayer implements IBoatInfoAppLayer {
+
+  private layer: Layer;
 
   constructor(projection: Projection) {
     var featureRequest = new WFS().writeGetFeature({
@@ -56,7 +60,7 @@ export class WeatherwarningLayer extends VectorLayer implements ILayer {
         }
       });
 
-    super({
+    this.layer = new VectorLayer({
       source: vectorSource,
       visible: false,
       style: new Style({
@@ -67,7 +71,10 @@ export class WeatherwarningLayer extends VectorLayer implements ILayer {
       }),
     });
 
-    this.set("layerName", WeatherwarningLayer.name);
+    this.layer.set("layerName", WeatherwarningLayer.name);
+  }
+  getOlLayer(): Layer<Source> {
+    return this.layer;
   }
 
   getName(): string {

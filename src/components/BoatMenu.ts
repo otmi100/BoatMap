@@ -1,14 +1,14 @@
 import { IBoat } from "../interfaces/IBoat";
-import { BoatMenuController } from "../controllers/BoatMenuController";
-import { ILayer } from "../interfaces/ILayer";
+import { BoatInfoApp } from "./BoatInfoApp";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 
 export class BoatMenu {
 
-  private boatMenuController: BoatMenuController;
+  private boatInfoApp: BoatInfoApp;
   private layerControlers:Map<string,HTMLInputElement> = new Map();
 
-  constructor(boats: IBoat[], layers: ILayer[], boatMenuController: BoatMenuController) {
-    this.boatMenuController = boatMenuController;
+  constructor(boats: IBoat[], layers: IBoatInfoAppLayer[], boatInfoApp: BoatInfoApp) {
+    this.boatInfoApp = boatInfoApp;
     this.generateBoatList(boats);
     this.generateLayerCheckboxes(layers);
   }
@@ -21,13 +21,13 @@ export class BoatMenu {
         boatEntry.appendChild(document.createTextNode(boat.name));
         boatEntry.appendChild(document.createElement("BR"));
         boatEntry.appendChild(document.createTextNode(boat.type));
-        boatEntry.onclick = () => this.boatMenuController.viewBoatOnMap(index);
+        boatEntry.onclick = () => this.boatInfoApp.viewBoatOnMap(index);
         boatList.appendChild(boatEntry);
       });
     }
   }
 
-  generateLayerCheckboxes(layers: ILayer[]) {
+  generateLayerCheckboxes(layers: IBoatInfoAppLayer[]) {
     const switcherElements = document.getElementById("layerswitcher");
     layers.forEach(layer => {
       var layerLabel = document.createElement("label");
@@ -41,7 +41,7 @@ export class BoatMenu {
       var caption = document.createElement("SPAN");
       caption.innerHTML = layer.getMenuHtml();
       layerLabel.appendChild(caption);
-      layerCheckBox.onclick = () => this.boatMenuController.updateLayerVisibilty();
+      layerCheckBox.onclick = () => this.boatInfoApp.updateLayerVisibilty();
       this.layerControlers.set(layer.getName(), <HTMLInputElement>layerCheckBox);
       switcherElements?.appendChild(layerLabel);
       switcherElements?.appendChild(document.createElement("BR"));

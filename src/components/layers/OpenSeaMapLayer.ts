@@ -1,11 +1,14 @@
 import TileLayer from "ol/layer/Tile";
 import { FeatureLike } from "ol/Feature";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
-import { ILayer } from "../../interfaces/ILayer";
+import { Layer } from "ol/layer";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 
-export class OpenSeaMapLayer extends TileLayer implements ILayer {
+export class OpenSeaMapLayer implements IBoatInfoAppLayer {
+  private layer: Layer;
+
   constructor() {
-    super({
+    this.layer = new TileLayer({
       source: new OSM({
         attributions: [
           '© <a href="http://www.openseamap.org/">OpenSeaMap</a>',
@@ -17,7 +20,10 @@ export class OpenSeaMapLayer extends TileLayer implements ILayer {
       }),
       visible: false,
     });
-    this.set("layerName", OpenSeaMapLayer.name);
+    this.layer.set("layerName", OpenSeaMapLayer.name);
+  }
+  getOlLayer(): Layer {
+    return this.layer;
   }
   getName(): string {
     return OpenSeaMapLayer.name;

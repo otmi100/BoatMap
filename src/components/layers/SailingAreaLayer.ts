@@ -3,7 +3,8 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import Projection from "ol/proj/Projection";
 import { FeatureLike } from "ol/Feature";
-import { ILayer } from "../../interfaces/ILayer";
+import { Layer } from "ol/layer";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -17,21 +18,28 @@ const unselectedStyle = new Style({
   }),
 });
 
-export class SailingAreaLayer extends TileLayer implements ILayer {
+export class SailingAreaLayer implements IBoatInfoAppLayer {
+
+  private layer: Layer;
 
   constructor(projection: Projection) {
 
-    super({
-      source: new TileWMS({
-        url: 'http://v39192.php-friends.de:8600/geoserver/wms',
-        crossOrigin: 'anonymous',
-        attributions: '© Michel Otto',
-        params: {'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon'},
-        serverType: 'geoserver',
-        projection: projection.getCode(),
-      })
-    });
-    this.set("layerName", SailingAreaLayer.name);
+    this.layer = new TileLayer(
+      {
+        source: new TileWMS({
+          url: 'http://v39192.php-friends.de:8600/geoserver/wms',
+          crossOrigin: 'anonymous',
+          attributions: '© Michel Otto',
+          params: { 'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon' },
+          serverType: 'geoserver',
+          projection: projection.getCode(),
+        })
+      }
+    );
+    this.layer.set("layerName", SailingAreaLayer.name);
+  }
+  getOlLayer(): Layer {
+    return this.layer;
   }
   getName(): string {
     return SailingAreaLayer.name;
@@ -47,8 +55,7 @@ export class SailingAreaLayer extends TileLayer implements ILayer {
   }
 
   showAreas(sailingAreas: string[]): void {
-    console.log(sailingAreas);
-    (<TileWMS>this.getSource()).updateParams({
+    (<TileWMS>this.layer.getSource()).updateParams({
       'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon',
       'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'
     });

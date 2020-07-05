@@ -1,17 +1,16 @@
 import { Map, View } from "ol";
-import Layer from "ol/layer/Layer";
 import { fromLonLat } from "ol/proj";
 import Projection from "ol/proj/Projection";
-import { BoatMapController } from "../controllers/BoatMapController";
+import { BoatInfoApp } from "./BoatInfoApp";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 
 export class BoatMap extends Map {
 
-  private boatMapController: BoatMapController;
+  private boatInfoApp: BoatInfoApp;
 
-  constructor(layers: Layer[], projection: Projection, boatMapController: BoatMapController) {
+  constructor(layers: IBoatInfoAppLayer[], projection: Projection, boatInfoApp: BoatInfoApp) {
     super({
       target: <HTMLElement>document.getElementById("map"),
-      layers: layers,
       view: new View({
         center: [982062.938921, 6997962.81318],
         zoom: 8,
@@ -19,7 +18,11 @@ export class BoatMap extends Map {
       }),
     });
 
-    this.boatMapController = boatMapController;
+    layers.forEach(layer => {
+      this.addLayer(layer.getOlLayer());
+    })
+
+    this.boatInfoApp = boatInfoApp;
     this.registerMouseInteraction();
   }
 
@@ -29,7 +32,7 @@ export class BoatMap extends Map {
         return feature;
       });
       if (feature) {
-        this.boatMapController.featureClick(feature);
+        this.boatInfoApp.featureClick(feature);
       }
     });
 

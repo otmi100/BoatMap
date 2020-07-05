@@ -1,36 +1,33 @@
-import { BoatMap } from "../components/BoatMap";
+import { BoatMap } from "./BoatMap";
 import { fromLonLat } from "ol/proj";
 import { IBoat } from "../interfaces/IBoat";
-import { BoatLayer } from "../components/layers/BoatLayer";
-import { BoatMenuController } from "./BoatMenuController";
-import { SailingAreaLayer } from "../components/layers/SailingAreaLayer";
-import { Layer } from "ol/layer";
 import { FeatureLike } from "ol/Feature";
-import { ILayer } from "../interfaces/ILayer";
 import Projection from "ol/proj/Projection";
+import { BoatMenu } from "./BoatMenu";
+import { IBoatInfoAppLayer } from "../interfaces/IBoatInfoAppLayer";
+import { SailingAreaLayer } from "./layers/SailingAreaLayer";
+import { BoatLayer } from "./layers/BoatLayer";
 
 
 
-export class BoatMapController {
+export class BoatInfoApp {
 
   private selectedBoatIndex = -1; // currently selected boat
   private boatMap: BoatMap;
-  private boatMenuController: BoatMenuController | undefined;
   private boats: IBoat[];
-  private layers: Map<String, Layer> = new Map();
+  private layers: Map<String, IBoatInfoAppLayer> = new Map();
+  private boatMenu: BoatMenu;
 
-  constructor(boats: IBoat[], projection: Projection, layers: Map<String, Layer>) {
+  constructor(boats: IBoat[], projection: Projection, layers: Map<String, IBoatInfoAppLayer>) {
     this.boats = boats;
     this.layers = layers;
     this.boatMap = new BoatMap(Array.from(this.layers.values()), projection, this);
+    this.boatMenu = new BoatMenu(boats, Array.from(layers.values()),  this);
+    this.updateLayerVisibilty();
   }
 
-  registerBoatMenuController(boatMenuController: BoatMenuController): void {
-    this.boatMenuController = boatMenuController;
-  }
-
-
-  viewBoat(boatIndex: number): void {
+  viewBoatOnMap(boatIndex: number): void {
+    
     var sailingAreaLayer = <SailingAreaLayer>this.layers.get(SailingAreaLayer.name);
     var boatLayer = <BoatLayer>this.layers.get(BoatLayer.name);
 
@@ -47,9 +44,7 @@ export class BoatMapController {
       return;
     }
     boatLayer.highlightBoat(this.selectedBoatIndex);
-    if (this.boatMenuController) {
-      this.boatMenuController.styleBoatMenu(this.selectedBoatIndex);
-    }
+      this.styleBoatMenu(this.selectedBoatIndex);
   }
 
   defaultZoomAndFocus(): void {
@@ -72,20 +67,24 @@ export class BoatMapController {
 
   }
 
-  setVisibleLayers(layers: string[]): void {
-    this.boatMap.setVisibleLayers(layers);
-  }
-
   featureClick(feature: FeatureLike): void {
     let layer = this.layers.get(feature.get("fromLayer"));
-    console.log(layer);
     if (layer) {
-      (layer as unknown as ILayer).handleClick(feature);
-    }
-
-    if (feature.get("fromLayer") == BoatLayer.name) {
-      this.viewBoat(<number>feature.getId());
+      layer.handleClick(feature);
     }
   }
 
+  styleBoatMenu(selectedBoatIndex: number): void {
+    this.boatMenu.styleBoatMenu(selectedBoatIndex);
+  }
+
+  updateLayerVisibilty(): void {
+    let visibleLayers: string[] = [];
+    this.layers.forEach(layer => {
+      if (this.boatMenu.isLayerChecked(layer.getName())) {
+        visibleLayers.push(layer.getName());
+      }
+    });
+    this.boatMap.setVisibleLayers(visibleLayers);
+  }
 }

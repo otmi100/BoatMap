@@ -1,15 +1,22 @@
 import TileLayer from "ol/layer/Tile";
 import { FeatureLike } from "ol/Feature";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
-import { ILayer } from "../../interfaces/ILayer";
+import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { Layer } from "ol/layer";
+import Source from "ol/source/Source";
 
-export class OpenStreetMapLayer extends TileLayer implements ILayer {
+export class OpenStreetMapLayer implements IBoatInfoAppLayer {
+  private layer: TileLayer;
   constructor() {
-    super({
+    this.layer = new TileLayer({
       source: new OSM(),
-    });
-    this.set("layerName", OpenStreetMapLayer.name);
+    })
+    this.layer.set("layerName", OpenStreetMapLayer.name);
   }
+  getOlLayer(): Layer<Source> {
+    return this.layer;
+  }
+
   getName(): string {
     return OpenStreetMapLayer.name;
   }
