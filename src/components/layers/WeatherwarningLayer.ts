@@ -6,7 +6,7 @@ import VectorSource from "ol/source/Vector";
 import { Style, Stroke, Fill } from "ol/style";
 import Projection from "ol/proj/Projection";
 import { FeatureLike } from "ol/Feature";
-import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoAppLayer";
 import { Layer } from "ol/layer";
 import Source from "ol/source/Source";
 import { IBoat } from "src/interfaces/IBoat";
@@ -91,7 +91,7 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
     return false;
   }
 
-  handleClick(feature: FeatureLike): void {
+  handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
     alert(
       feature.getProperties()["SEVERITY"] +
       ": " +

@@ -4,7 +4,7 @@ import TileWMS from "ol/source/TileWMS";
 import Projection from "ol/proj/Projection";
 import { FeatureLike } from "ol/Feature";
 import { Layer } from "ol/layer";
-import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoAppLayer";
 import { IBoat } from "src/interfaces/IBoat";
 
 const selectedStyle = new Style({
@@ -47,7 +47,7 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
     }
   }
 
-  handleClick(feature: FeatureLike, setSelectedBoat: Function): void {
+  handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
     
   }
   getOlLayer(): Layer {

@@ -2,7 +2,7 @@ import TileLayer from "ol/layer/Tile";
 import { FeatureLike } from "ol/Feature";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
 import { Layer } from "ol/layer";
-import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoAppLayer";
 import { IBoat } from "src/interfaces/IBoat";
 
 export class OpenSeaMapLayer implements IBoatInfoAppLayer {
@@ -38,7 +38,7 @@ export class OpenSeaMapLayer implements IBoatInfoAppLayer {
   getCheckedDefault(): boolean {
     return false;
   }
-  handleClick(feature: FeatureLike): void {
+  handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
 
   }
 }

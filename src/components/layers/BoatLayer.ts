@@ -72,9 +72,6 @@ export class BoatLayer implements IBoatInfoAppLayer {
   updateBoatSelection(boat: IBoat): void {
     this.highlightBoat(boat);
   }
-  setSelectedBoat(boat: IBoat): void {
-    
-  }
   getOlLayer(): Layer<Source> {
     return this.layer;
   }
@@ -99,7 +96,7 @@ export class BoatLayer implements IBoatInfoAppLayer {
     }
   }
 
-  highlightBoat(boat: IBoat): void {
+  private highlightBoat(boat: IBoat): void {
     let boatIndex = this.boats.findIndex(b => b === boat);
     this.boatFeatures.forEach((boatFeature, boatFeatureIndex) => {
       if (boatIndex == -1) {

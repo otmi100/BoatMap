@@ -2,7 +2,7 @@ import TileWMS from 'ol/source/TileWMS';
 import TileLayer from "ol/layer/Tile";
 import Projection from 'ol/proj/Projection';
 import { FeatureLike } from 'ol/Feature';
-import { IBoatInfoAppLayer } from 'src/interfaces/IBoatInfoAppLayer';
+import { IBoatInfoAppLayer, ISetBoatCallback } from 'src/interfaces/IBoatInfoAppLayer';
 import { Layer } from 'ol/layer';
 import Source from 'ol/source/Source';
 import { IBoat } from 'src/interfaces/IBoat';
@@ -40,7 +40,7 @@ export class WindbarbLayer implements IBoatInfoAppLayer {
   getCheckedDefault(): boolean {
     return false;
   }
-  handleClick(feature: FeatureLike): void {
+  handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
 
   }
 
