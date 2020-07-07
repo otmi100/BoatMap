@@ -4,6 +4,7 @@ import OSM, { ATTRIBUTION } from "ol/source/OSM";
 import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 import { Layer } from "ol/layer";
 import Source from "ol/source/Source";
+import { IBoat } from "src/interfaces/IBoat";
 
 export class OpenStreetMapLayer implements IBoatInfoAppLayer {
   private layer: TileLayer;
@@ -12,6 +13,9 @@ export class OpenStreetMapLayer implements IBoatInfoAppLayer {
       source: new OSM(),
     })
     this.layer.set("layerName", OpenStreetMapLayer.name);
+  }
+  updateBoatSelection(boat: IBoat | null): void {
+
   }
   getOlLayer(): Layer<Source> {
     return this.layer;

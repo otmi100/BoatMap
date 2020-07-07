@@ -9,6 +9,7 @@ import { FeatureLike } from "ol/Feature";
 import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
 import { Layer } from "ol/layer";
 import Source from "ol/source/Source";
+import { IBoat } from "src/interfaces/IBoat";
 
 export class WeatherwarningLayer implements IBoatInfoAppLayer {
 
@@ -72,6 +73,9 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
     });
 
     this.layer.set("layerName", WeatherwarningLayer.name);
+  }
+  updateBoatSelection(boat: IBoat | null): void {
+
   }
   getOlLayer(): Layer<Source> {
     return this.layer;

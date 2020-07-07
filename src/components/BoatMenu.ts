@@ -6,11 +6,13 @@ export class BoatMenu {
 
   private boatInfoApp: BoatInfoApp;
   private layerControlers:Map<string,HTMLInputElement> = new Map();
+  private selectedBoat: IBoat | null;
 
   constructor(boats: IBoat[], layers: IBoatInfoAppLayer[], boatInfoApp: BoatInfoApp) {
     this.boatInfoApp = boatInfoApp;
     this.generateBoatList(boats);
     this.generateLayerCheckboxes(layers);
+    this.selectedBoat = null;
   }
 
   generateBoatList(boats: IBoat[]) {
@@ -21,7 +23,15 @@ export class BoatMenu {
         boatEntry.appendChild(document.createTextNode(boat.name));
         boatEntry.appendChild(document.createElement("BR"));
         boatEntry.appendChild(document.createTextNode(boat.type));
-        boatEntry.onclick = () => this.boatInfoApp.viewBoatOnMap(index);
+        boatEntry.onclick = () => {
+          if(this.selectedBoat === boats[index]) {
+            this.selectedBoat = null;
+            this.boatInfoApp.updateSelectedBoat(null);
+          } else {
+            this.selectedBoat = boats[index];
+            this.boatInfoApp.updateSelectedBoat(boats[index]);
+          }
+        }
         boatList.appendChild(boatEntry);
       });
     }

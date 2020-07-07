@@ -4,15 +4,12 @@ import { IBoat } from "../interfaces/IBoat";
 import { FeatureLike } from "ol/Feature";
 import Projection from "ol/proj/Projection";
 import { BoatMenu } from "./BoatMenu";
-import { IBoatInfoAppLayer } from "../interfaces/IBoatInfoAppLayer";
-import { SailingAreaLayer } from "./layers/SailingAreaLayer";
-import { BoatLayer } from "./layers/BoatLayer";
+import { IBoatInfoAppLayer, ISetBoatCallback } from "../interfaces/IBoatInfoAppLayer";
 
 
 
 export class BoatInfoApp {
 
-  private selectedBoatIndex = -1; // currently selected boat
   private boatMap: BoatMap;
   private boats: IBoat[];
   private layers: Map<String, IBoatInfoAppLayer> = new Map();
@@ -26,25 +23,9 @@ export class BoatInfoApp {
     this.updateLayerVisibilty();
   }
 
-  viewBoatOnMap(boatIndex: number): void {
-    
-    var sailingAreaLayer = <SailingAreaLayer>this.layers.get(SailingAreaLayer.name);
-    var boatLayer = <BoatLayer>this.layers.get(BoatLayer.name);
-
-    if (boatIndex == this.selectedBoatIndex) { // Delesect Boat & hide areas
-      this.selectedBoatIndex = -1;
-      sailingAreaLayer.showAreas([]);
-      this.defaultZoomAndFocus();
-    } else if (this.boats[boatIndex]) { // select boat, area and focus
-      this.selectedBoatIndex = boatIndex;
-      this.boatMap.focus(this.boats[boatIndex].location.lon, this.boats[boatIndex].location.lat);
-      sailingAreaLayer.showAreas(this.boats[this.selectedBoatIndex].sailingareas);
-    } else {
-      console.log("Boat with id " + boatIndex + " not found.");
-      return;
-    }
-    boatLayer.highlightBoat(this.selectedBoatIndex);
-      this.styleBoatMenu(this.selectedBoatIndex);
+  updateSelectedBoat(boat: IBoat | null): void {
+    this.layers.forEach(layer => layer.updateBoatSelection(boat));
+    this.boatMenu.styleBoatMenu(this.boats.findIndex(b => b === boat));
   }
 
   defaultZoomAndFocus(): void {
@@ -70,7 +51,9 @@ export class BoatInfoApp {
   featureClick(feature: FeatureLike): void {
     let layer = this.layers.get(feature.get("fromLayer"));
     if (layer) {
-      layer.handleClick(feature);
+      layer.handleClick(feature, (boat : IBoat | null ) => {
+        this.updateSelectedBoat(boat);
+      });
     }
   }
 

@@ -9,7 +9,7 @@ import { fromLonLat } from "ol/proj";
 import Projection from "ol/proj/Projection";
 import boatlogo from "../../data/img/boat.svg";
 import { IBoat } from "../../interfaces/IBoat";
-import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoAppLayer";
 import { Layer } from "ol/layer";
 import Source from "ol/source/Source";
 
@@ -42,10 +42,12 @@ const iconStyleFocused = new Style({
 export class BoatLayer implements IBoatInfoAppLayer {
 
   private layer: Layer;
-  private currentBoatId: number;
   private boatFeatures: Feature[] = [];
+  private boats: IBoat[];
+  private selectedBoatId: number;
 
   constructor(boats: IBoat[], projection: Projection) {
+    this.boats = boats;
     boats.forEach((boat, boatIndex) => {
       var boatFeature = new Feature({
         geometry: new Point(fromLonLat([boat.location.lon, boat.location.lat], projection)),
@@ -65,8 +67,13 @@ export class BoatLayer implements IBoatInfoAppLayer {
       visible: true,
     });
     this.layer.set("layerName", BoatLayer.name);
-
-    this.currentBoatId = -1;
+    this.selectedBoatId = -1;
+  }
+  updateBoatSelection(boat: IBoat): void {
+    this.highlightBoat(boat);
+  }
+  setSelectedBoat(boat: IBoat): void {
+    
   }
   getOlLayer(): Layer<Source> {
     return this.layer;
@@ -81,18 +88,19 @@ export class BoatLayer implements IBoatInfoAppLayer {
   getCheckedDefault(): boolean {
     return true;
   }
-  handleClick(feature: FeatureLike): void {
+  handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
     let boatId = <number>feature.getId();
-    console.log(boatId);
-    console.log(this.currentBoatId);
-    if(this.currentBoatId == boatId) {
-      boatId = -1;
+    if(boatId == this.selectedBoatId) {
+      setSelectedBoat(null);
+      this.selectedBoatId = -1;
+    } else {
+      setSelectedBoat(this.boats[boatId]);
+      this.selectedBoatId = boatId;
     }
-    this.highlightBoat(boatId);
-    this.currentBoatId = boatId;
   }
 
-  highlightBoat(boatIndex: number): void {
+  highlightBoat(boat: IBoat): void {
+    let boatIndex = this.boats.findIndex(b => b === boat);
     this.boatFeatures.forEach((boatFeature, boatFeatureIndex) => {
       if (boatIndex == -1) {
         boatFeature.setStyle(iconStyleFocused);

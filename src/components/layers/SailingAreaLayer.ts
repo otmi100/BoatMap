@@ -5,6 +5,7 @@ import Projection from "ol/proj/Projection";
 import { FeatureLike } from "ol/Feature";
 import { Layer } from "ol/layer";
 import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoat } from "src/interfaces/IBoat";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -38,6 +39,17 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
     );
     this.layer.set("layerName", SailingAreaLayer.name);
   }
+  updateBoatSelection(boat: IBoat): void {
+    if(boat) {
+      this.showAreas(boat.sailingareas);
+    } else {
+      this.showAreas([]);
+    }
+  }
+
+  handleClick(feature: FeatureLike, setSelectedBoat: Function): void {
+    
+  }
   getOlLayer(): Layer {
     return this.layer;
   }
@@ -50,11 +62,8 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
   getCheckedDefault(): boolean {
     return true;
   }
-  handleClick(feature: FeatureLike): void {
 
-  }
-
-  showAreas(sailingAreas: string[]): void {
+  private showAreas(sailingAreas: string[]): void {
     (<TileWMS>this.layer.getSource()).updateParams({
       'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon',
       'cql_filter': 'name IN (\'' + sailingAreas.join('\', \'') + '\')'

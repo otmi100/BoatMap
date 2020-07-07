@@ -3,6 +3,7 @@ import { FeatureLike } from "ol/Feature";
 import OSM, { ATTRIBUTION } from "ol/source/OSM";
 import { Layer } from "ol/layer";
 import { IBoatInfoAppLayer } from "src/interfaces/IBoatInfoAppLayer";
+import { IBoat } from "src/interfaces/IBoat";
 
 export class OpenSeaMapLayer implements IBoatInfoAppLayer {
   private layer: Layer;
@@ -21,6 +22,9 @@ export class OpenSeaMapLayer implements IBoatInfoAppLayer {
       visible: false,
     });
     this.layer.set("layerName", OpenSeaMapLayer.name);
+  }
+  updateBoatSelection(boat: IBoat | null): void {
+
   }
   getOlLayer(): Layer {
     return this.layer;
