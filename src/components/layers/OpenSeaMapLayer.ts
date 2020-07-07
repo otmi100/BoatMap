@@ -21,7 +21,6 @@ export class OpenSeaMapLayer implements IBoatInfoAppLayer {
       }),
       visible: false,
     });
-    this.layer.set("layerName", OpenSeaMapLayer.name);
   }
   updateBoatSelection(boat: IBoat | null): void {
 

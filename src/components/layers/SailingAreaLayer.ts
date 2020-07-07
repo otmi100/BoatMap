@@ -37,7 +37,6 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
         })
       }
     );
-    this.layer.set("layerName", SailingAreaLayer.name);
   }
   updateBoatSelection(boat: IBoat): void {
     if(boat) {

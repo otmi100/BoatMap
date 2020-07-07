@@ -5,10 +5,11 @@ import { FeatureLike } from "ol/Feature";
 import Projection from "ol/proj/Projection";
 import { BoatMenu } from "./BoatMenu";
 import { IBoatInfoAppLayer, ISetBoatCallback } from "../interfaces/IBoatInfoAppLayer";
-
-
+import { Layer } from "ol/layer";
 
 export class BoatInfoApp {
+
+  static LAYERNAMEATTRIBUTE = "layerName";
 
   private boatMap: BoatMap;
   private boats: IBoat[];
@@ -18,6 +19,7 @@ export class BoatInfoApp {
   constructor(boats: IBoat[], projection: Projection, layers: Map<String, IBoatInfoAppLayer>) {
     this.boats = boats;
     this.layers = layers;
+    this.setLayerNameAttribute();
     this.boatMap = new BoatMap(Array.from(this.layers.values()), projection, this);
     this.boatMenu = new BoatMenu(boats, Array.from(layers.values()),  this);
     this.updateLayerVisibilty();
@@ -48,8 +50,8 @@ export class BoatInfoApp {
 
   }
 
-  featureClick(feature: FeatureLike): void {
-    let layer = this.layers.get(feature.get("fromLayer"));
+  featureClick(feature: FeatureLike, olLayer: Layer): void {
+    let layer = this.layers.get(olLayer.get(BoatInfoApp.LAYERNAMEATTRIBUTE));
     if (layer) {
       layer.handleClick(feature, (boat : IBoat | null ) => {
         this.updateSelectedBoat(boat);
@@ -69,5 +71,13 @@ export class BoatInfoApp {
       }
     });
     this.boatMap.setVisibleLayers(visibleLayers);
+  }
+
+  private setLayerNameAttribute() : void {
+    this.layers.forEach(layer => {
+      layer.getOlLayer().set(BoatInfoApp.LAYERNAMEATTRIBUTE,layer.getName());
+      console.log(layer.getOlLayer().getSource());
+      console.log(typeof layer.getOlLayer().getSource().get);
+    })
   }
 }

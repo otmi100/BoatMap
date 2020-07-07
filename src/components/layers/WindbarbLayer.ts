@@ -23,7 +23,6 @@ export class WindbarbLayer implements IBoatInfoAppLayer {
 
       })
     });
-    this.layer.set("layerName", WindbarbLayer.name);
   }
   updateBoatSelection(boat: IBoat | null): void {
     

@@ -31,8 +31,11 @@ export class BoatMap extends Map {
       var feature = this.forEachFeatureAtPixel(evt.pixel, function (feature) {
         return feature;
       });
-      if (feature) {
-        this.boatInfoApp.featureClick(feature);
+      var layer = this.forEachLayerAtPixel(evt.pixel, function (layer) {
+        return layer;
+      });
+      if (feature && layer) {
+        this.boatInfoApp.featureClick(feature, layer);
       }
     });
 
@@ -66,7 +69,7 @@ export class BoatMap extends Map {
 
   setVisibleLayers(layers: string[]): void {
     this.getLayers().forEach(layer => {
-      if (layers.includes(layer.getProperties()["layerName"])) {
+      if (layers.includes(layer.getProperties()[BoatInfoApp.LAYERNAMEATTRIBUTE])) {
         layer.setVisible(true);
       } else {
         layer.setVisible(false);

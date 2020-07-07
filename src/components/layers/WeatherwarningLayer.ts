@@ -72,7 +72,6 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
       }),
     });
 
-    this.layer.set("layerName", WeatherwarningLayer.name);
   }
   updateBoatSelection(boat: IBoat | null): void {
 

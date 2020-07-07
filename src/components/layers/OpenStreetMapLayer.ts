@@ -12,7 +12,6 @@ export class OpenStreetMapLayer implements IBoatInfoAppLayer {
     this.layer = new TileLayer({
       source: new OSM(),
     })
-    this.layer.set("layerName", OpenStreetMapLayer.name);
   }
   updateBoatSelection(boat: IBoat | null): void {
 

@@ -55,8 +55,6 @@ export class BoatLayer implements IBoatInfoAppLayer {
       });
       boatFeature.setStyle(iconStyleFocused);
       boatFeature.setId(boatIndex);
-      boatFeature.set("fromLayer", BoatLayer.name);
-      boatFeature.set("boatname", boat.name);
       this.boatFeatures.push(boatFeature);
     });
 
@@ -66,7 +64,6 @@ export class BoatLayer implements IBoatInfoAppLayer {
       }),
       visible: true,
     });
-    this.layer.set("layerName", BoatLayer.name);
     this.selectedBoatId = -1;
   }
   updateBoatSelection(boat: IBoat): void {
