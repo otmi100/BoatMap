@@ -10,6 +10,7 @@ import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoApp
 import { Layer } from "ol/layer";
 import Source from "ol/source/Source";
 import { IBoat } from "src/interfaces/IBoat";
+import { ATTRIBUTION } from "ol/source/OSM";
 
 export class WeatherwarningLayer implements IBoatInfoAppLayer {
 
@@ -24,7 +25,7 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
       outputFormat: "application/json",
     });
 
-    var vectorSource = new VectorSource();
+    var vectorSource = new VectorSource({ attributions: ['© DWD', ATTRIBUTION], });
 
     fetch("https://maps.dwd.de/geoserver/dwd/ows", {
       method: "POST",

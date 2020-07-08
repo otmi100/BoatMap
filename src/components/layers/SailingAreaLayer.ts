@@ -6,6 +6,7 @@ import { FeatureLike } from "ol/Feature";
 import { Layer } from "ol/layer";
 import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoAppLayer";
 import { IBoat } from "src/interfaces/IBoat";
+import { ATTRIBUTION } from "ol/source/OSM";
 
 const selectedStyle = new Style({
   fill: new Fill({
@@ -30,7 +31,7 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
         source: new TileWMS({
           url: 'http://v39192.php-friends.de:8600/geoserver/wms',
           crossOrigin: 'anonymous',
-          attributions: '© Michel Otto',
+          attributions: ['© FAO, 2018', ATTRIBUTION],
           params: { 'LAYERS': 'boatinfo:segelgebiete', 'STYLES': 'polygon' },
           serverType: 'geoserver',
           projection: projection.getCode(),
@@ -39,7 +40,7 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
     );
   }
   updateBoatSelection(boat: IBoat): void {
-    if(boat) {
+    if (boat) {
       this.showAreas(boat.sailingareas);
     } else {
       this.showAreas([]);
@@ -47,7 +48,7 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
   }
 
   handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
-    
+
   }
   getOlLayer(): Layer {
     return this.layer;

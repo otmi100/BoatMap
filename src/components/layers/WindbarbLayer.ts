@@ -6,6 +6,7 @@ import { IBoatInfoAppLayer, ISetBoatCallback } from 'src/interfaces/IBoatInfoApp
 import { Layer } from 'ol/layer';
 import Source from 'ol/source/Source';
 import { IBoat } from 'src/interfaces/IBoat';
+import { ATTRIBUTION } from 'ol/source/OSM';
 
 export class WindbarbLayer implements IBoatInfoAppLayer {
 
@@ -17,7 +18,7 @@ export class WindbarbLayer implements IBoatInfoAppLayer {
         url: 'https://maps.dwd.de/geoserver/dwd/RBSN_FF/ows',
         projection: projection.getCode(),
         crossOrigin: 'anonymous',
-        attributions: '© Deutscher Wetterdienst',
+        attributions: ['© DWD', ATTRIBUTION, ],
         params: { 'LAYERS': 'RBSN_FF', 'STYLES': 'RBSN_FF_Pfeile' },
         serverType: 'geoserver',
 
