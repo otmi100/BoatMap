@@ -28,26 +28,7 @@ export class BoatInfoApp {
   updateSelectedBoat(boat: IBoat | null): void {
     this.layers.forEach(layer => layer.updateBoatSelection(boat));
     this.boatMenu.styleBoatMenu(this.boats.findIndex(b => b === boat));
-  }
-
-  defaultZoomAndFocus(): void {
-    this.boatMap.getView().animate({
-      // zoom out
-      center: [982062.938921, 6997962.81318],
-      duration: 2000,
-      zoom: 8,
-    });
-  }
-
-  focus(lon: number, lat: number): void {
-    this.boatMap.getView().animate({
-      center: fromLonLat([
-        lon,
-        lat,
-      ]),
-      duration: 2000,
-    });
-
+    this.boatMap.focus(boat?.location.lon, boat?.location.lat);
   }
 
   featureClick(feature: FeatureLike, olLayer: Layer): void {
@@ -57,10 +38,6 @@ export class BoatInfoApp {
         this.updateSelectedBoat(boat);
       });
     }
-  }
-
-  styleBoatMenu(selectedBoatIndex: number): void {
-    this.boatMenu.styleBoatMenu(selectedBoatIndex);
   }
 
   updateLayerVisibilty(): void {
@@ -73,11 +50,10 @@ export class BoatInfoApp {
     this.boatMap.setVisibleLayers(visibleLayers);
   }
 
+  // write a layer name into olLayer to figure out which layer was clicked
   private setLayerNameAttribute() : void {
     this.layers.forEach(layer => {
       layer.getOlLayer().set(BoatInfoApp.LAYERNAMEATTRIBUTE,layer.getName());
-      console.log(layer.getOlLayer().getSource());
-      console.log(typeof layer.getOlLayer().getSource().get);
     })
   }
 }

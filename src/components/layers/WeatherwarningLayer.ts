@@ -44,7 +44,6 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
                 }),
               })
             );
-            feature.set("fromLayer", WeatherwarningLayer.name);
           });
           vectorSource.addFeatures(features);
         } else {
