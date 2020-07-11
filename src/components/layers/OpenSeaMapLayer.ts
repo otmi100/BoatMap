@@ -6,6 +6,8 @@ import { IBoatInfoAppLayer, ISetBoatCallback } from "src/interfaces/IBoatInfoApp
 import { IBoat } from "src/interfaces/IBoat";
 
 export class OpenSeaMapLayer implements IBoatInfoAppLayer {
+
+  static LAYERNAME = "OpenSeaMapLayer";
   private layer: Layer;
 
   constructor() {
@@ -29,7 +31,7 @@ export class OpenSeaMapLayer implements IBoatInfoAppLayer {
     return this.layer;
   }
   getName(): string {
-    return OpenSeaMapLayer.name;
+    return OpenSeaMapLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "OpenSeaMap Layer (nur im Detail-Zoom m&ouml;glich)";

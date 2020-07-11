@@ -10,6 +10,8 @@ import { ATTRIBUTION } from 'ol/source/OSM';
 
 export class WindbarbLayer implements IBoatInfoAppLayer {
 
+  static LAYERNAME = "WindbarbLayer";
+
   private layer: Layer;
 
   constructor(projection: Projection) {
@@ -32,7 +34,7 @@ export class WindbarbLayer implements IBoatInfoAppLayer {
     return this.layer;
   }
   getName(): string {
-    return WindbarbLayer.name;
+    return WindbarbLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "Zeige Windfahnen (Quelle: DWD)";

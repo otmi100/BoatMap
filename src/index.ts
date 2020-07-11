@@ -14,12 +14,12 @@ import { BoatInfoApp } from "./components/BoatInfoApp";
 const projection = new Projection({ code: "EPSG:3857" });
 
 let layers: Map<String, IBoatInfoAppLayer> = new Map();
-layers.set(OpenStreetMapLayer.name, new OpenStreetMapLayer());
-layers.set(SailingAreaLayer.name, new SailingAreaLayer(projection));
-layers.set(OpenSeaMapLayer.name, new OpenSeaMapLayer());
-layers.set(WeatherwarningLayer.name, new WeatherwarningLayer(projection));
-layers.set(WindbarbLayer.name, new WindbarbLayer(projection));
-layers.set(BoatLayer.name, new BoatLayer(boatsJson.boats, projection));
+layers.set(OpenStreetMapLayer.LAYERNAME, new OpenStreetMapLayer());
+layers.set(SailingAreaLayer.LAYERNAME, new SailingAreaLayer(projection));
+layers.set(OpenSeaMapLayer.LAYERNAME, new OpenSeaMapLayer());
+layers.set(WeatherwarningLayer.LAYERNAME, new WeatherwarningLayer(projection));
+layers.set(WindbarbLayer.LAYERNAME, new WindbarbLayer(projection));
+layers.set(BoatLayer.LAYERNAME, new BoatLayer(boatsJson.boats, projection));
 
 window.onload = function () {
   new BoatInfoApp(boatsJson.boats, projection, layers);

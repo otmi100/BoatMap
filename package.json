@@ -8,11 +8,15 @@
     "parcel": "1.12.4",
     "typescript": "^3.9.5"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/miot/boatinfo.git"
+  },
   "scripts": {
     "test": "",
     "start": "parcel index.html",
     "build": "parcel build --public-url . index.html"
   },
   "author": "Michel Otto",
-  "license": ""
+  "license": "MIT"
 }

@@ -7,6 +7,9 @@ import Source from "ol/source/Source";
 import { IBoat } from "src/interfaces/IBoat";
 
 export class OpenStreetMapLayer implements IBoatInfoAppLayer {
+
+  static LAYERNAME = "OpenStreetMapLayer";
+
   private layer: TileLayer;
   constructor() {
     this.layer = new TileLayer({
@@ -21,7 +24,7 @@ export class OpenStreetMapLayer implements IBoatInfoAppLayer {
   }
 
   getName(): string {
-    return OpenStreetMapLayer.name;
+    return OpenStreetMapLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "Basiskarte OpenStreetMap";

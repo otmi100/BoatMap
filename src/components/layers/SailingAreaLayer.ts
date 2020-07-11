@@ -22,6 +22,8 @@ const unselectedStyle = new Style({
 
 export class SailingAreaLayer implements IBoatInfoAppLayer {
 
+  static LAYERNAME = "SailingAreaLayer";
+
   private layer: Layer;
 
   constructor(projection: Projection) {
@@ -54,7 +56,7 @@ export class SailingAreaLayer implements IBoatInfoAppLayer {
     return this.layer;
   }
   getName(): string {
-    return SailingAreaLayer.name;
+    return SailingAreaLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "Zeige Segelgebiete der Boote/des ausgew&auml;hlten Boots";

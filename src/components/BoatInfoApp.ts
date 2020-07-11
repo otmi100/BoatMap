@@ -20,7 +20,7 @@ export class BoatInfoApp {
     this.boats = boats;
     this.layers = layers;
     this.setLayerNameAttribute();
-    this.boatMap = new BoatMap(Array.from(this.layers.values()), projection, this);
+    this.boatMap = new BoatMap(Array.from(layers.values()), projection, this);
     this.boatMenu = new BoatMenu(boats, Array.from(layers.values()),  this);
     this.updateLayerVisibilty();
   }

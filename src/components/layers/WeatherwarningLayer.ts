@@ -14,6 +14,8 @@ import { ATTRIBUTION } from "ol/source/OSM";
 
 export class WeatherwarningLayer implements IBoatInfoAppLayer {
 
+  static LAYERNAME = "WeatherwarningLayer";
+
   private layer: Layer;
 
   constructor(projection: Projection) {
@@ -81,7 +83,7 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
   }
 
   getName(): string {
-    return WeatherwarningLayer.name;
+    return WeatherwarningLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "Zeige Wetterwarnungen des DWD <br>(Anzahl: <span id=\"warndingcount\"></span><div id=\"spinner\"></div>)";

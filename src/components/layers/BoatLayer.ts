@@ -41,6 +41,8 @@ const iconStyleFocused = new Style({
 
 export class BoatLayer implements IBoatInfoAppLayer {
 
+  static LAYERNAME = "BoatLayer";
+
   private layer: Layer;
   private boatFeatures: Feature[] = [];
   private boats: IBoat[];
@@ -74,7 +76,7 @@ export class BoatLayer implements IBoatInfoAppLayer {
   }
 
   getName(): string {
-    return BoatLayer.name;
+    return BoatLayer.LAYERNAME;
   }
   getMenuHtml(): string {
     return "Zeige Segelboote des SUB";
