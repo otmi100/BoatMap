@@ -31,12 +31,9 @@ export class BoatMap extends Map {
       var feature = this.forEachFeatureAtPixel(evt.pixel, function (feature) {
         return feature;
       });
-      var layer = this.forEachLayerAtPixel(evt.pixel, function (layer) {
-        return layer;
-      });
-      if (feature && layer) {
+      this.forEachLayerAtPixel(evt.pixel, (layer) => {
         this.boatInfoApp.featureClick(feature, layer);
-      }
+      });
     });
 
     // change mouse cursor when over marker

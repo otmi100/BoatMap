@@ -47,6 +47,7 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
                 }),
               })
             );
+            feature.set("featureType", "weatherWarning");
           });
           vectorSource.addFeatures(features);
         } else {
@@ -93,11 +94,13 @@ export class WeatherwarningLayer implements IBoatInfoAppLayer {
   }
 
   handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
-    alert(
-      feature.getProperties()["SEVERITY"] +
-      ": " +
-      feature.getProperties()["DESCRIPTION"]
-    );
+    if (feature.get("featureType") == "weatherWarning") {
+      alert(
+        feature.getProperties()["SEVERITY"] +
+        ": " +
+        feature.getProperties()["DESCRIPTION"]
+      );
+    }
   }
 
   private getColorCode(feature: Feature): string {

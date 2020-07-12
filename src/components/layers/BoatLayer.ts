@@ -86,12 +86,14 @@ export class BoatLayer implements IBoatInfoAppLayer {
   }
   handleClick(feature: FeatureLike, setSelectedBoat: ISetBoatCallback): void {
     let boatId = <number>feature.getId();
-    if(boatId == this.selectedBoatId) {
-      setSelectedBoat(null);
-      this.selectedBoatId = -1;
-    } else {
-      setSelectedBoat(this.boats[boatId]);
-      this.selectedBoatId = boatId;
+    if (boatId && this.boats[boatId]) {
+      if (boatId == this.selectedBoatId) {
+        setSelectedBoat(null);
+        this.selectedBoatId = -1;
+      } else {
+        setSelectedBoat(this.boats[boatId]);
+        this.selectedBoatId = boatId;
+      }
     }
   }
 
