@@ -6,13 +6,15 @@
 ### Voraussetzungen
 * Installiertes docker + docker-compose
 * gdal-bin unter Linux (für das Tool ogr2ogr), um die geoJSON in die Postgres zu laden. Oder Alternativ über QGIS, SQL Skripte, o.ä.
+* npm
+* git
 
 
 ### Step by Step
 
 #### Environment Variablen  anpassen
 
-  * Mindestens Standardpasswörter GEOSERVER_ADMIN_PASSWORD in geoserver.env
+  * Mindestens Standardpasswort GEOSERVER_ADMIN_PASSWORD in geoserver.env
   * Wenn postgres von extern erreichbar sein sollte, auf jeden Fall auch POSTGRES_USER und POSTGRES_PASS in db.env
 
     ```
@@ -48,7 +50,7 @@ Ip ist unter geoserver_db_1 gelistet.
 cd boatinfo/geoserver/
 ogr2ogr -f "PostgreSQL" PG:"host=localhost port=25434 dbname=gis user=docker password=docker" "Segelgebiete.geojson"
 ```
-_Hinweis_: ogr2ogr Version < 3.0.2 funktioniert nicht mit postres >=12
+*Hinweis*: ogr2ogr Version < 3.0.2 funktioniert nicht mit postres >=12  
 ggf aktuelle version aus dem Untubu Repository (sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable) oder auf http://download.osgeo.org/gdal/
 
 #### Segelgebiete Layer veröffentlichen
@@ -57,6 +59,8 @@ ggf aktuelle version aus dem Untubu Repository (sudo add-apt-repository ppa:ubun
 * Speichern
 
 #### Client starten
+* URL vom WMS Service des Segelgebiete Layers in ./src/components/layers/SailingAreaLayer.ts anpassen 
+
 ```sh
 npm install
 npm run start
